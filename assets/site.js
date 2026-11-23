@@ -35,7 +35,7 @@
   var bul = function(slug){ return V && V.satir.filter(function(x){ return x.slug === slug; })[0]; };
   /* yaptırım defterinde (panel) yayınlanan düzeltmeler: tutarı katsayıya bağlı olmayan satırlar */
   var DEFTER = depo.al("ipece-defter", {});
-  var sayilar = function(t){ return (String(t).match(/\d{1,3}(?:\.\d{3})*(?:,\d+)?/g) || []).filter(function(n){ return !/^20\d\d$/.test(n); }).map(function(n){ return parseFloat(n.replace(/\./g, "").replace(",", ".")); }); };
+  var sayilar = function(t){ return (String(t).match(/(?<![%\d.,])\d[\d.]*(?:,\d+)?/g) || []).filter(function(n){ return !/^20\d\d$/.test(n); }).map(function(n){ return parseFloat(n.replace(/\./g, "").replace(",", ".")); }); };
   if (V) V.satir.forEach(function(x){
     var d = DEFTER[x.slug];
     if (d && d.yayinda && d.tutar && !x.kat) {
@@ -49,6 +49,7 @@
   if (V) {
     V.satir.forEach(function(x){ x.tutar = satirTutar(x); x.bt = satirBt(x); x.ust = satirUst(x); });
     Array.prototype.forEach.call(document.querySelectorAll("dd[data-satir]"), function(d){ var x = bul(d.getAttribute("data-satir")); if (x) d.textContent = x.tutar; });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-satir-ozet]"), function(d){ var x = bul(d.getAttribute("data-satir-ozet")); if (x) d.textContent = x.tutar; });
     var hsx = $("#hesap[data-satir]"); if (hsx) { var hx = bul(hsx.getAttribute("data-satir")); if (hx && hx.bt) hsx.setAttribute("data-bt", hx.bt); }
   }
   window.IPECE_PARAM = PARAM;
@@ -284,9 +285,10 @@
       var yukCiz = function(){
         var sec2 = $("#k-kanun", det).value;
         $("#k-yuk", det).innerHTML = kanunlar.filter(function(n){ return !sec2 || n === sec2; }).map(function(n){
-          return "<h3 class=\"kanun-b\"><span class=\"kod\">" + n + "</span> " + esc(V.kanun[n]) + "</h3><ul class=\"yuk-liste\">" + gr[n].map(function(x){
+          var enUst = gr[n].reduce(function(m, x){ return x.dogru && x.ust && x.ust > m ? x.ust : m; }, 0);
+          return "<details class=\"kanun-grup\"" + (sec2 ? " open" : "") + "><summary><span class=\"kod\">" + n + "</span><span class=\"ad\">" + esc(V.kanun[n]) + "</span><span class=\"say\">" + gr[n].length + " yükümlülük" + (enUst ? " · en çok <span class=\"tutar\">" + tl(enUst) + "</span>" : "") + "</span></summary><ul class=\"yuk-liste\">" + gr[n].map(function(x){
             return "<li><a href=\"" + kok + "yukumlulukler/" + x.slug + "/\"><span class=\"kod\">" + esc(x.kod) + "</span><span class=\"ad\">" + esc(x.yuk) + "</span><span class=\"" + (x.dogru ? "tutar" : "dogrulanmadi") + "\">" + esc(x.tutar) + "</span></a></li>";
-          }).join("") + "</ul>";
+          }).join("") + "</ul></details>";
         }).join("");
       };
       $("#k-kanun", det).addEventListener("change", yukCiz); yukCiz();
@@ -302,13 +304,31 @@
     if (ilkK) goster(ilkK); else listele();
   }
 
-  /* iletişim: konu ön seçimi; form henüz bir adrese bağlı değil, bunu açıkça söyler */
+  /* ana sayfa mini hesaplayıcı (5510 m.102/a-1, asgari ücret parametresine bağlı) */
+  var mh = $("#mini-hesap");
+  if (mh && V) {
+    var mx = bul(mh.getAttribute("data-satir")), mi = $("#mini-adet"), mo = $("#mini-sonuc");
+    var mc = function(){ var a = parseInt(mi.value, 10) || 0; mo.textContent = a > 0 && mx ? tl(mx.bt * a) : "—"; };
+    mi.addEventListener("input", mc); mc();
+  }
+
+  /* iletişim: konu ön seçimi; gönderim talep olarak panele düşer (önizleme: yalnız bu tarayıcı) */
   var fk = $("#f-konu");
   if (fk) {
     var k2 = new URLSearchParams(location.search).get("konu");
     if (k2) { for (var i = 0; i < fk.options.length; i++) if (fk.options[i].value === k2) fk.selectedIndex = i; }
     var sayfa = new URLSearchParams(location.search).get("sayfa");
     if (sayfa) $("#f-mesaj").value = "Sayfa: " + sayfa + "\n\n";
-    $("#iletisim-form").addEventListener("submit", function(e){ e.preventDefault(); $("#f-durum").hidden = false; });
+    var kurumAlan = $("#f-kurum"); if (kurumAlan && !kurumAlan.value) kurumAlan.value = depo.al("ipece-son-kurum", "");
+    $("#iletisim-form").addEventListener("submit", function(e){
+      e.preventDefault();
+      var f = e.target, d = new FormData(f);
+      var t = talepEkle({ ad: d.get("ad"), tel: d.get("tel"), kurum: d.get("kurum"), kod: "", yuk: fk.options[fk.selectedIndex].text, tahmin: null, esikUstu: false,
+        sayfa: location.pathname, sohbet: d.get("mesaj") ? [{ soru: d.get("mesaj"), yanit: "İletişim formundan" }] : [], bildirim: "bagli-degil" });
+      var s = $("#f-durum"); s.hidden = false;
+      s.innerHTML = t ? "<strong>Mesajınız alındı.</strong> Talep numaranız " + t.id + ". Uzmanımız sizi arayacak.<br><span class=\"kucuk\">Önizleme: talep bu tarayıcıdaki yönetim paneline düştü. Balrium'a anlık bildirim henüz bağlı değil.</span>"
+                      : "Mesajınız kaydedilemedi. Tarayıcınız yerel kaydı engelliyor olabilir.";
+      if (t) Array.prototype.forEach.call(f.querySelectorAll("input,textarea,select,button"), function(x){ x.disabled = true; });
+    });
   }
 })();

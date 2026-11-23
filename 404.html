@@ -7,8 +7,8 @@
 <meta name="description" content="Aradığınız sayfa bulunamadı.">
 <meta name="robots" content="noindex,nofollow">
 <link rel="icon" href="/ipece/assets/ikon.svg" type="image/svg+xml">
-<link rel="preload" href="/ipece/assets/font/serif-600.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/ipece/assets/font/sans-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/ipece/assets/font/inter-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/ipece/assets/font/inter-display-600.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/ipece/assets/site.css">
 <meta property="og:title" content="Sayfa bulunamadı | ipece">
 <meta property="og:description" content="Aradığınız sayfa bulunamadı.">
@@ -22,19 +22,19 @@
 <header class="bas">
   <div class="kap">
     <a class="logo" href="/ipece/" aria-label="ipece ana sayfa"><img src="/ipece/assets/logo.svg" alt="ipece" width="200" height="62"></a>
+    <nav class="menu" id="ana-menu" aria-label="Ana menü">
+      <ul><li><a href="kurumlar/">Kurumlar</a></li><li><a href="/ipece/yukumlulukler/">Yükümlülükler</a></li><li><a href="/ipece/ceza-geldiyse/">Ceza geldiyse</a></li><li><a href="/ipece/yayinlar/">Yayınlar</a></li><li><a href="/ipece/iletisim/">İletişim</a></li></ul>
+      <form class="mobil-ara" role="search" action="/ipece/yukumlulukler/"><input type="search" name="q" placeholder="Madde ya da konu ara" aria-label="Yükümlülüklerde ara"><button type="submit">Ara</button></form>
+      <a class="dugme menu-cta" href="/ipece/iletisim/?konu=soru">Uzmana sorun</a>
+    </nav>
     <form class="ara" role="search" action="/ipece/yukumlulukler/">
-      <input type="search" name="q" placeholder="Madde ya da konu: 4857/98, ücret" aria-label="Yükümlülüklerde ara">
+      <input type="search" name="q" placeholder="Madde ya da konu ara" aria-label="Yükümlülüklerde ara">
       <button type="submit">Ara</button>
     </form>
+    <a class="dugme bas-cta" href="/ipece/iletisim/?konu=soru">Uzmana sorun</a>
     <button class="menu-dugme" type="button" aria-expanded="false" aria-controls="ana-menu">Menü</button>
   </div>
 </header>
-<nav class="menu" id="ana-menu" aria-label="Ana menü">
-  <div class="kap">
-    <form class="mobil-ara" role="search" action="/ipece/yukumlulukler/"><input type="search" name="q" placeholder="Madde ya da konu ara" aria-label="Yükümlülüklerde ara"><button type="submit">Ara</button></form>
-    <ul><li><a href="kurumlar/">Kurumlar</a></li><li><a href="/ipece/yukumlulukler/">Yükümlülükler</a></li><li><a href="/ipece/ceza-geldiyse/">Ceza geldiyse</a></li><li><a href="/ipece/yayinlar/">Yayınlar</a></li><li><a href="/ipece/iletisim/">İletişim</a></li></ul>
-  </div>
-</nav>
 
 <main id="icerik">
 
