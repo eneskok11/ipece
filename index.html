@@ -19,98 +19,93 @@
 </head>
 <body>
 <a class="atla" href="#icerik">İçeriğe geç</a>
-<header class="bas">
-  <div class="kap">
-    <a class="logo" href="" aria-label="ipece ana sayfa"><img src="assets/logo.svg" alt="ipece" width="200" height="62"></a>
-    <nav class="menu" id="ana-menu" aria-label="Ana menü">
-      <ul><li><a href="kurumlar/">Kurumlar</a></li><li><a href="yukumlulukler/">Yükümlülükler</a></li><li><a href="ceza-geldiyse/">Ceza geldiyse</a></li><li><a href="yayinlar/">Yayınlar</a></li><li><a href="iletisim/">İletişim</a></li></ul>
-      <form class="mobil-ara" role="search" action="yukumlulukler/"><input type="search" name="q" placeholder="Madde ya da konu ara" aria-label="Yükümlülüklerde ara"><button type="submit">Ara</button></form>
-      <a class="dugme menu-cta" href="iletisim/?konu=soru">Uzmana sorun</a>
-    </nav>
-    <form class="ara" role="search" action="yukumlulukler/">
-      <input type="search" name="q" placeholder="Madde ya da konu ara" aria-label="Yükümlülüklerde ara">
-      <button type="submit">Ara</button>
-    </form>
-    <a class="dugme bas-cta" href="iletisim/?konu=soru">Uzmana sorun</a>
+<header class="kb">
+  <div class="kb-ust"><div class="kap">
+    <a class="kb-kimlik" href="" aria-label="ipece ana sayfa"><img src="assets/ikon.svg" alt="" width="58" height="58"><span><small>İdari Para Cezası Önleme ve Uyum Platformu</small><b>İPECE</b></span></a>
+    <div class="kb-sag">
+      <span class="kb-cati">IPMAC <i>|</i> Balrium <i>|</i> SS4Key</span>
+      <form class="kb-ara" role="search" action="yukumlulukler/"><input type="search" name="q" placeholder="Madde ya da konu" aria-label="Yükümlülüklerde ara"><button type="submit" aria-label="Ara"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg></button></form>
+    </div>
     <button class="menu-dugme" type="button" aria-expanded="false" aria-controls="ana-menu">Menü</button>
-  </div>
+  </div></div>
+  <nav class="menu kb-menu" id="ana-menu" aria-label="Ana menü"><div class="kap">
+    <ul><li><a href="" aria-current="page">Ana sayfa</a></li><li><a href="kurumlar/">Kurumlar</a></li><li><a href="yukumlulukler/">Yükümlülükler</a></li><li><a href="ceza-geldiyse/">Ceza geldiyse</a></li><li><a href="yayinlar/">Yayınlar</a></li><li><a href="hakkimizda/">Hakkımızda</a></li><li><a href="iletisim/">İletişim</a></li></ul>
+    <form class="mobil-ara" role="search" action="yukumlulukler/"><input type="search" name="q" placeholder="Madde ya da konu ara" aria-label="Yükümlülüklerde ara"><button type="submit">Ara</button></form>
+    <a class="dugme menu-cta" href="iletisim/?konu=soru">Uzmana sorun</a>
+  </div></nav>
 </header>
 
 <main id="icerik">
 
-<section class="e-acilis" aria-labelledby="ana-b">
-  <div class="kap e-acilis-ic">
-    <h1 id="ana-b">İdari para cezası gelmeden önce.</h1>
-    <div class="e-sag">
-      <p>Kurumunuzun tabi olduğu yükümlülükleri, kanun maddesi ve 2026 tutarıyla görün. Tutar yüksekse hukukçumuz sizi arar.</p>
-      <form class="e-soru" id="asistan-form" role="search">
-        <label class="gizli" for="asistan-soru">Derdinizi yazın</label>
-        <input id="asistan-soru" placeholder="Derdinizi yazın" autocomplete="off">
-        <button class="dugme" type="submit">Sor</button>
-      </form>
-      <div class="yanit e-yanit" id="asistan-yanit" hidden aria-live="polite"></div>
-      <a class="e-bag" href="kurumlar/">Kurumunuzu bulun</a>
+<div class="kap k-sahne-kap">
+<section class="k-sahne" aria-labelledby="ana-b">
+  <div class="k-sol">
+    <h1 id="ana-b">İdari para cezası gelmeden önce</h1>
+    <p>Kurumunuzun tabi olduğu yükümlülükleri, kanun maddesi ve 2026 tutarıyla görün. Tutar yüksekse hukukçumuz sizi arar.</p>
+    <form class="k-soru" id="asistan-form" role="search">
+      <label for="asistan-soru">Derdinizi yazın</label>
+      <div><input id="asistan-soru" placeholder="Örnek: 4857/98'den ceza geldi" autocomplete="off"><button class="dugme" type="submit">Sor</button></div>
+    </form>
+    <div class="yanit k-yanit" id="asistan-yanit" hidden aria-live="polite"></div>
+  </div>
+  <div class="k-sag"><svg class="k-bina" viewBox="0 0 520 330" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round">
+  <path d="M40 112 L260 34 L480 112 Z"/><path d="M78 104 L260 46 L442 104"/>
+  <path d="M236 92 L260 70 L284 92 Z"/>
+  <rect x="34" y="112" width="452" height="16"/><rect x="44" y="128" width="432" height="10"/>
+  <g><rect x="62" y="146" width="30" height="132"/><path d="M70 152v120M77 152v120M84 152v120"/><rect x="56" y="138" width="42" height="8"/><rect x="56" y="278" width="42" height="8"/><rect x="128" y="146" width="30" height="132"/><path d="M136 152v120M143 152v120M150 152v120"/><rect x="122" y="138" width="42" height="8"/><rect x="122" y="278" width="42" height="8"/><rect x="194" y="146" width="30" height="132"/><path d="M202 152v120M209 152v120M216 152v120"/><rect x="188" y="138" width="42" height="8"/><rect x="188" y="278" width="42" height="8"/><rect x="260" y="146" width="30" height="132"/><path d="M268 152v120M275 152v120M282 152v120"/><rect x="254" y="138" width="42" height="8"/><rect x="254" y="278" width="42" height="8"/><rect x="326" y="146" width="30" height="132"/><path d="M334 152v120M341 152v120M348 152v120"/><rect x="320" y="138" width="42" height="8"/><rect x="320" y="278" width="42" height="8"/><rect x="392" y="146" width="30" height="132"/><path d="M400 152v120M407 152v120M414 152v120"/><rect x="386" y="138" width="42" height="8"/><rect x="386" y="278" width="42" height="8"/><rect x="458" y="146" width="30" height="132"/><path d="M466 152v120M473 152v120M480 152v120"/><rect x="452" y="138" width="42" height="8"/><rect x="452" y="278" width="42" height="8"/></g>
+  <rect x="30" y="286" width="460" height="10"/><rect x="18" y="296" width="484" height="10"/><rect x="6" y="306" width="508" height="12"/>
+</svg></div>
+</section>
+</div>
+
+<nav class="k-hizli" aria-label="Hızlı erişim"><div class="kap"><ul>
+  <li><a href="kurumlar/"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21V9l8-5 8 5v12"/><path d="M9 21v-6h6v6M3 21h18"/></svg><span>Kurumunuzu bulun</span></a></li>
+  <li><a href="yukumlulukler/"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/></svg><span>Yükümlülükler</span></a></li>
+  <li><a href="yukumlulukler/?hesap=1"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h2M12 12h2M16 12h0M8 16h2M12 16h2M16 16h0"/></svg><span>Ceza hesaplayın</span></a></li>
+  <li><a href="ceza-geldiyse/"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 10h16M9 3v4M15 3v4M12 14v3"/></svg><span>Ceza geldiyse</span></a></li>
+  <li><a href="iletisim/?konu=soru"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg><span>Uzmana sorun</span></a></li>
+</ul></div></nav>
+
+<div class="kap k-uc">
+  <section>
+    <h2 class="k-b">Öne çıkan yükümlülükler</h2>
+    <ul class="k-one"><li><span class="kod">4857 · 98</span><a href="yukumlulukler/4857-98-muvazaali-alt-isverenlik/">Muvazaalı alt işverenlik</a><span class="tutar">302.484 TL</span></li><li><span class="kod">5510 · 102/a-1</span><a href="yukumlulukler/5510-102-a-1-ise-giris-bildirgesi/">İşe giriş bildirgesi</a><span class="tutar">33.030 TL / kişi</span></li><li><span class="kod">4857 · 101</span><a href="yukumlulukler/4857-101-engelli-isci-kotasi/">Engelli işçi kotası</a><span class="tutar">37.748 TL / kişi / ay</span></li><li><span class="kod">6698 · 18/1-b</span><a href="yukumlulukler/6698-18-1-b-veri-guvenligi/">Veri güvenliği</a><span class="tutar">256.357–17.092.242 TL</span></li></ul>
+    <a class="k-devam" href="yukumlulukler/">Tüm yükümlülükler</a>
+  </section>
+  <section>
+    <h2 class="k-b">Duyurular</h2>
+    <ul class="k-duyuru">
+      <li><a href="hakkimizda/">ipece.org yayında</a><time datetime="2026-11-23">23.11.2026</time></li>
+      <li><a href="kurumlar/">İlk alan: İstanbul'daki 558 özel eğitim ve rehabilitasyon merkezi</a><time datetime="2026-11-23">23.11.2026</time></li>
+      <li><a href="yukumlulukler/">9 kanunda 69 yükümlülüğün 2026 tutarları yayımlandı</a><time datetime="2026-11-23">23.11.2026</time></li>
+    </ul>
+    <h2 class="k-b" style="margin-top:2.2rem">Yayınlar</h2>
+    <ul class="k-duyuru">
+      <li><a href="yayinlar/muvazaali-alt-isverenlikte-idari-para-cezasi/">Muvazaalı alt işverenlikte idari para cezası ve iptal davası</a><time>Makale · Balrium</time></li>
+    </ul>
+  </section>
+  <section>
+    <h2 class="k-b">Hizmetler</h2>
+    <div class="k-dugmeler">
+      <a href="kurumlar/">Kurum bulma</a>
+      <a href="yukumlulukler/">Yükümlülük künyeleri</a>
+      <a href="yukumlulukler/?hesap=1">Ceza hesaplayıcı</a>
+      <a href="ceza-geldiyse/">Ceza geldiyse ne yapmalı</a>
+      <a href="iletisim/?konu=ceza">Hukukçu geri araması</a>
+      <a href="iletisim/?konu=tahkim">Tahkim ve arabuluculuk (IPMAC)</a>
     </div>
-  </div>
-</section>
-
-<section class="e-sahne" aria-label="ipece asistanı">
-  <div class="kap">
-    <div class="e-zemin">
-      <figure class="e-pencere">
-        <div class="e-pencere-bas"><span class="e-nokta"></span><span>ipece · Asistan</span></div>
-        <div class="e-pencere-govde">
-          <div class="e-mesaj-s">4857/98'den ceza geldi</div>
-          <div class="e-mesaj-c">
-            <p class="e-ref">4857 sayılı İş Kanunu · m. 98</p>
-            <p class="e-ad">Muvazaalı alt işverenlik</p>
-            <p class="e-tutar">302.484 TL</p>
-            <p class="e-not">2026 tutarı · Kaynak: Balrium</p>
-          </div>
-          <div class="e-mesaj-c e-kucuk-kart">
-            <span>Tutar yüksek. Hukukçumuz sizi arasın.</span>
-            <a class="dugme" href="yukumlulukler/4857-98-muvazaali-alt-isverenlik/#geri-arama">Beni arayın</a>
-          </div>
-        </div>
-      </figure>
-    </div>
-  </div>
-</section>
-
-<section class="e-sayilar" aria-label="Kapsam">
-  <div class="kap">
-    <a href="yukumlulukler/"><b>69</b><span>yükümlülük, kanun maddesi ve 2026 tutarıyla</span></a>
-    <a href="yukumlulukler/"><b>9</b><span>kanun: İş, SGK, KVKK, tüketici, çevre ve diğerleri</span></a>
-    <a href="kurumlar/"><b>558</b><span>özel eğitim ve rehabilitasyon merkezi, İstanbul</span></a>
-  </div>
-</section>
-
-<section class="e-bant">
-  <div class="kap">
-    <h2>Ceza mı geldi?</h2>
-    <p>Süre tebliğ gününde başlar. Ne yapacağınızı adım adım görün.</p>
-    <a class="dugme ikincil" href="ceza-geldiyse/">Adımları görün</a>
-  </div>
-</section>
+  </section>
+</div>
 
 </main>
-<footer class="alt">
-  <div class="kap">
-    <div>
-      <a class="logo" href="" aria-label="ipece ana sayfa"><img src="assets/logo.svg" alt="ipece" width="200" height="62"></a>
-      <p style="margin-top:1rem;max-width:40ch">İdari para cezası gelmeden önce kurumunuzun yükümlülüklerini görün.</p>
-    </div>
-    <div>
-      <h2>Bilgi</h2>
-      <ul><li><a href="yukumlulukler/">Yükümlülükler</a></li><li><a href="ceza-geldiyse/">Ceza geldiyse</a></li><li><a href="yayinlar/">Yayınlar</a></li></ul>
-    </div>
-    <div>
-      <h2>Kurum</h2>
-      <ul><li><a href="hakkimizda/">Hakkımızda</a></li><li><a href="iletisim/">İletişim</a></li><li><a href="iletisim/?konu=hata&amp;sayfa=/">Bu sayfada hata mı var?</a></li></ul>
-    </div>
+<footer class="ka">
+  <div class="kap ka-ic">
+    <div><h2>İPECE</h2><ul><li><a href="hakkimizda/">Hakkımızda</a></li><li><a href="iletisim/">İletişim</a></li><li><a href="iletisim/?konu=hata&amp;sayfa=/">Bu sayfada hata mı var?</a></li></ul></div>
+    <div><h2>Bilgi</h2><ul><li><a href="kurumlar/">Kurumlar</a></li><li><a href="yukumlulukler/">Yükümlülükler</a></li><li><a href="ceza-geldiyse/">Ceza geldiyse</a></li><li><a href="yayinlar/">Yayınlar</a></li></ul></div>
+    <div><h2>Çatı kurumlarımız</h2><ul><li>IPMAC · Uluslararası İhtisas Tahkim ve Arabuluculuk Merkezi</li><li>Balrium · Hukuk ve uyum danışmanlığı</li><li>SS4Key</li></ul></div>
+    <div class="ka-amblem"><img src="assets/ikon.svg" alt="" width="96" height="96"><span>İPECE<small>İdari Para Cezası Önleme ve Uyum Platformu</small></span></div>
   </div>
-  <div class="cati"><div class="kap">Çatı kurumlarımız <span>IPMAC</span><span>Balrium</span><span>SS4Key</span></div></div>
-  <div class="son"><div class="kap"><span>© 2026 ipece</span><span>Tutarlar: Balrium 2026 yaptırım envanteri · Son güncelleme 23.11.2026</span></div></div>
+  <div class="ka-son"><div class="kap"><span>© 2026 ipece</span><span>Tutarlar: Balrium 2026 yaptırım envanteri · Son güncelleme 23.11.2026</span></div></div>
 </footer>
 <script src="assets/veri.js" defer></script><script src="assets/site.js" defer></script>
 </body>
