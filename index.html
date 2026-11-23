@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta name="description" content="ipece: idari para cezası önleme ve uyum platformu. IPMAC, Balrium ve SS4Key tek çatı altında.">
+<title>ipece | İdari Para Cezası Önleme ve Uyum Platformu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: kurumsal kamu sitesi — ince üst şerit, mühürlü başlık, lacivert menü bandı, tek sütun okuma + kenarda künye; tek açık tema (bilinçli). */
+:root{
+  --kagit:#FFFFFF;        /* zemin */
+  --zemin2:#F1F4F9;       /* bant zemini */
+  --murekkep:#0F2C5C;     /* ana lacivert: metin, menü */
+  --gece:#0A1F44;         /* üst şerit, alt bilgi */
+  --celik:#4B5B78;        /* ikincil metin */
+  --cizgi:#D6DDE8;        /* ayraç */
+  --pirinc:#C8102E;        /* kırmızı vurgu: mühür halkası, etkin menü, adım numaraları */
+  --ceza:#C8102E;         /* yalnız ceza tutarı */
+  --bekle:#7A5A00;        /* bekleyen bilgi işareti */
+  --bekle-z:#FFF4CC;
+  --serif:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --sans:"IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--kagit);color:var(--murekkep);font:16px/1.6 var(--sans)}
+a{color:inherit}
+.ic{max-width:1160px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--serif);font-weight:600;text-wrap:balance;margin:0;line-height:1.2}
+h1{font-size:clamp(2rem,4.4vw,3.1rem);letter-spacing:-.01em}
+h2{font-size:clamp(1.5rem,2.6vw,2rem)}
+h3{font-size:1.2rem}
+p{margin:0}
+.etiket{font:500 .72rem/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--celik)}
+:focus-visible{outline:2px solid var(--pirinc);outline-offset:2px}
+mark.bk{background:var(--bekle-z);color:var(--bekle);border:1px dashed var(--bekle);padding:0 .3em;border-radius:2px;font-weight:500}
+
+
+/* üst şerit */
+.serit{background:var(--gece);color:#C9D2E2;font-size:.8rem}
+.serit .ic{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding-block:.45rem;flex-wrap:wrap}
+.serit nav{display:flex;gap:1.1rem;flex-wrap:wrap}
+.serit a{text-decoration:none}
+.serit a:hover{color:#fff}
+.dil b{color:#fff;font-weight:600}
+
+/* başlık */
+.bas .ic{display:flex;align-items:center;gap:1.1rem;padding-block:1.3rem;flex-wrap:wrap}
+.muhur{width:72px;height:72px;flex:none}
+.ad{display:flex;flex-direction:column;gap:.15rem;min-width:0}
+.ad .kelime{font:600 2rem/1 var(--serif);letter-spacing:.02em}
+.ad .alt{font-size:.92rem;color:var(--celik)}
+.bas .ara{margin-left:auto;display:flex;border:1px solid var(--cizgi);min-width:0}
+.bas .ara input{border:0;padding:.6rem .8rem;font:inherit;font-size:.9rem;width:240px;max-width:52vw;color:var(--murekkep)}
+.bas .ara button{border:0;background:var(--murekkep);color:#fff;padding:0 .9rem;font:500 .85rem var(--sans);cursor:pointer}
+
+/* menü */
+.menu{background:var(--murekkep);position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+.menu .ic{display:flex;overflow-x:auto;scrollbar-width:none}
+.menu a{color:#E4E9F2;text-decoration:none;font:500 .92rem/1 var(--sans);padding:1rem 1.1rem;white-space:nowrap;border-bottom:3px solid transparent}
+.menu a:hover{background:#18396F}
+.menu a[aria-current="page"]{border-bottom-color:var(--pirinc);color:#fff}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--murekkep)}
+
+/* görünümler */
+.gor{display:none}
+.gor.acik{display:block}
+.blok{padding-block:3.2rem}
+.blok + .blok{border-top:1px solid var(--cizgi)}
+.bant{background:var(--zemin2)}
+.kirinti{font-size:.82rem;color:var(--celik);padding-block:1rem 0}
+.kirinti a{text-decoration:none}
+
+/* ana sayfa açılışı */
+.acilis .ic{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:3rem;padding-block:3.4rem 3rem;align-items:start}
+.acilis p.giris{font-size:1.12rem;color:var(--celik);max-width:56ch;margin-top:1rem}
+.eylem{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:1.6rem}
+.dug{display:inline-flex;align-items:center;gap:.5rem;font:600 .92rem/1 var(--sans);padding:.85rem 1.2rem;text-decoration:none;border:1px solid var(--murekkep);cursor:pointer}
+.dug.ana{background:var(--murekkep);color:#fff}
+.dug.ikinci{background:transparent;color:var(--murekkep)}
+.dug:hover{filter:brightness(1.15)}
+.ornek{border:1px solid var(--cizgi);background:#fff}
+.ornek .ust{display:flex;justify-content:space-between;gap:1rem;padding:.8rem 1rem;border-bottom:1px solid var(--cizgi);align-items:baseline}
+.ornek .govde{padding:1rem;display:grid;gap:.5rem}
+.madde{font:500 .85rem var(--mono);color:var(--murekkep)}
+.tutar{font:600 1.6rem/1.1 var(--serif);color:var(--ceza);font-variant-numeric:tabular-nums}
+.not{font-size:.8rem;color:var(--celik)}
+
+/* kurumlar */
+.uclu{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border-top:2px solid var(--murekkep);margin-top:1.8rem}
+.kurum{padding:1.5rem 1.4rem 1.6rem 0;display:grid;gap:.6rem;align-content:start}
+.kurum + .kurum{padding-left:1.4rem;border-left:1px solid var(--cizgi)}
+.kurum .rol{font:500 .72rem/1.3 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--pirinc)}
+.kurum p{color:var(--celik);font-size:.95rem}
+.kurum a.git{font-weight:600;font-size:.9rem;text-decoration:none;border-bottom:1px solid var(--cizgi);justify-self:start;margin-top:.3rem}
+
+/* süreç */
+.surec{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2rem;margin-top:1.8rem}
+.adim{display:grid;gap:.5rem;align-content:start}
+.adim .no{font:600 2.2rem/1 var(--serif);color:var(--pirinc)}
+.adim p{color:var(--celik);font-size:.95rem}
+
+/* duyurular ve yayınlar */
+.liste{display:grid;margin-top:1.4rem;border-top:1px solid var(--cizgi)}
+.satir{display:grid;grid-template-columns:8.5rem minmax(0,1fr);gap:1.4rem;padding:1.1rem 0;border-bottom:1px solid var(--cizgi)}
+.satir time,.satir .tur{font:500 .8rem/1.5 var(--mono);color:var(--celik)}
+.satir h3{font-size:1.08rem}
+.satir p{color:var(--celik);font-size:.93rem;margin-top:.3rem}
+.iki{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:3rem}
+.bolumbas{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;flex-wrap:wrap}
+.bolumbas a{font-size:.88rem;font-weight:600;text-decoration:none}
+
+/* metin sayfaları */
+.sayfa{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:3.5rem;padding-block:2rem 3.5rem}
+.okuma{max-width:68ch;display:grid;gap:1.1rem}
+.okuma p{font-size:1.04rem}
+.okuma h2{margin-top:1rem}
+.okuma ul{margin:0;padding-left:1.2rem;display:grid;gap:.5rem}
+.kunye{border-top:2px solid var(--murekkep);padding-top:1rem;display:grid;gap:1rem;align-content:start;font-size:.92rem}
+.kunye dt{font:500 .72rem/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--celik)}
+.kunye dd{margin:.3rem 0 0}
+
+/* uyum merkezi */
+.arac{display:grid;grid-template-columns:280px minmax(0,1fr);gap:2.2rem;margin-top:1.6rem}
+.secim{display:grid;gap:1rem;align-content:start;border-top:2px solid var(--murekkep);padding-top:1rem}
+.secim label{display:grid;gap:.35rem;font:500 .78rem var(--sans);color:var(--celik)}
+.secim select,.secim input{font:inherit;font-size:.95rem;color:var(--murekkep);padding:.55rem .6rem;border:1px solid var(--cizgi);background:#fff;width:100%}
+.tablo-kap{overflow-x:auto;border-top:2px solid var(--murekkep)}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:.92rem}
+th{font:500 .72rem/1.3 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--celik);text-align:left;padding:.8rem .7rem;border-bottom:1px solid var(--cizgi)}
+td{padding:.85rem .7rem;border-bottom:1px solid var(--cizgi);vertical-align:top}
+td.t{color:var(--ceza);font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+td .madde{white-space:nowrap}
+.uyari{margin-top:1rem;font-size:.85rem;color:var(--celik);border-left:3px solid var(--pirinc);padding:.2rem 0 .2rem .8rem}
+.soru{margin-top:1.6rem;border:1px solid var(--cizgi);padding:1.2rem;display:grid;gap:.8rem;background:var(--zemin2)}
+.soru form{display:flex;gap:.6rem;flex-wrap:wrap}
+.soru input{flex:1 1 260px;min-width:0;font:inherit;padding:.7rem .8rem;border:1px solid var(--cizgi)}
+.cevap{font-size:.95rem;border-left:3px solid var(--murekkep);padding-left:.8rem}
+
+/* iletişim */
+.form{display:grid;gap:1rem;max-width:560px}
+.form label{display:grid;gap:.35rem;font:500 .8rem var(--sans);color:var(--celik)}
+.form input,.form textarea,.form select{font:inherit;color:var(--murekkep);padding:.65rem .7rem;border:1px solid var(--cizgi);background:#fff}
+.form textarea{min-height:120px;resize:vertical}
+.durum{font-size:.9rem;color:var(--ceza)}
+
+/* alt bilgi */
+footer{background:var(--gece);color:#B7C1D3;font-size:.86rem;margin-top:0}
+footer .ic{padding-block:2.4rem;display:grid;grid-template-columns:minmax(0,1.4fr) repeat(3,minmax(0,1fr));gap:2rem}
+footer h4{font:500 .72rem/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:#fff;margin:0 0 .8rem}
+footer ul{list-style:none;margin:0;padding:0;display:grid;gap:.45rem}
+footer a{text-decoration:none}
+footer a:hover{color:#fff}
+.alt-serit{border-top:1px solid #1D3866}
+.alt-serit .ic{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding-block:1rem;grid-template-columns:none;font-size:.8rem}
+
+@media (max-width:860px){
+  .acilis .ic,.sayfa,.arac,.iki{grid-template-columns:minmax(0,1fr)}
+  .uclu,.surec{grid-template-columns:minmax(0,1fr)}
+  .kurum,.kurum + .kurum{padding:1.3rem 0;border-left:0}
+  .kurum + .kurum{border-top:1px solid var(--cizgi)}
+  footer .ic{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .bas .ara{margin-left:0;width:100%}
+  .bas .ara input{width:100%;max-width:none;flex:1}
+  .satir{grid-template-columns:minmax(0,1fr);gap:.3rem}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+@media print{
+  @page{size:A4;margin:14mm 14mm 16mm}
+  :root{--kagit:#fff}
+  *{print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  .serit,.menu,.bas .ara,.eylem,.soru form,.form button,body::before{display:none!important}
+  .gor{display:block!important;break-before:page}
+  .gor:first-of-type{break-before:auto}
+  .acilis .ic,.sayfa,.arac,.iki,.uclu,.surec,footer .ic{grid-template-columns:1fr!important}
+  .kurum + .kurum{border-left:0;padding-left:0}
+  h1,h2,h3,.bolumbas{break-after:avoid}
+  .kurum,.adim,.satir,.ornek,tr,.uyari,.soru{break-inside:avoid}
+  thead{display:table-header-group}
+  .tablo-kap{overflow:visible;border-top:0}
+  table{border-top:2px solid var(--murekkep);min-width:0}
+}
+</style>
+
+
+</head>
+<body>
+<div class="serit"><div class="ic">
+  <nav aria-label="Hızlı bağlantılar"><a href="#iletisim">İletişim</a><a href="#yayinlar">Mevzuat ve yayınlar</a><a href="#uyum">Uyum Merkezi</a></nav>
+  <div class="dil"><b>TR</b> · EN</div>
+</div></div>
+
+<header class="bas"><div class="ic">
+  <svg class="muhur" viewBox="0 0 120 120" role="img" aria-label="ipece mührü">
+    <defs><path id="yay" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/></defs>
+    <circle cx="60" cy="60" r="57" fill="none" stroke="#C8102E" stroke-width="2"/>
+    <circle cx="60" cy="60" r="35" fill="#0F2C5C"/>
+    <circle cx="60" cy="60" r="52" fill="none" stroke="#0F2C5C" stroke-width=".8"/>
+    <text font-family="IBM Plex Mono, monospace" font-size="8.6" letter-spacing="2.2" fill="#0F2C5C"><textPath href="#yay" startOffset="0">İDARİ PARA CEZASI · ÖNLEME VE UYUM ·</textPath></text>
+    <g fill="#FFFFFF">
+      <rect x="42" y="46" width="36" height="3"/>
+      <rect x="45" y="51" width="4" height="20"/><rect x="54" y="51" width="4" height="20"/><rect x="62" y="51" width="4" height="20"/><rect x="71" y="51" width="4" height="20"/>
+      <rect x="42" y="73" width="36" height="3"/>
+      <path d="M41 45 L60 36 L79 45 Z"/>
+    </g>
+  </svg>
+  <div class="ad">
+    <span class="kelime">ipece</span>
+    <span class="alt">İdari Para Cezası Önleme ve Uyum Platformu</span>
+  </div>
+  <form class="ara" role="search" onsubmit="event.preventDefault();location.hash='uyum'">
+    <input id="ust-ara" type="search" placeholder="Kurum adı veya kanun maddesi" aria-label="Sitede ara">
+    <button type="submit">Ara</button>
+  </form>
+</div></header>
+
+<nav class="menu" aria-label="Ana menü"><div class="ic">
+  <a href="#ana">Ana sayfa</a>
+  <a href="#hakkimizda">Hakkımızda</a>
+  <a href="#kurumlar">Kurumlarımız</a>
+  <a href="#uyum">Uyum Merkezi</a>
+  <a href="#yayinlar">Mevzuat ve yayınlar</a>
+  <a href="#duyurular">Duyurular</a>
+  <a href="#iletisim">İletişim</a>
+</div></nav>
+
+<main>
+
+<!-- ANA SAYFA -->
+<section class="gor" id="v-ana" data-v="ana">
+  <div class="acilis"><div class="ic">
+    <div>
+      <span class="etiket">İdari yaptırım uyumu</span>
+      <h1 style="margin-top:.8rem">İdari para cezası gelmeden önce.</h1>
+      <p class="giris">Kurumunuzun hangi yükümlülükler yüzünden yaptırım riski taşıdığını görün. İlgili mevzuatı okuyun, gerekirse bir hukukçuyla görüşün.</p>
+      <div class="eylem">
+        <a class="dug ana" href="#uyum">Kurumunuzun risklerini görün</a>
+        <a class="dug ikinci" href="#kurumlar">Kurumlarımız</a>
+      </div>
+    </div>
+    <aside class="ornek" aria-label="Örnek yaptırım">
+      <div class="ust"><span class="etiket">Örnek yaptırım</span><span class="madde">5510 · m.102/a-1</span></div>
+      <div class="govde">
+        <h3>İşe giriş bildirgesinin süresinde verilmemesi</h3>
+        <div class="tutar">33.030 TL <span style="font:500 .9rem var(--sans);color:var(--celik)">/ kişi</span></div>
+        <p class="not">2026 tutarı. Sonuç: re'sen tescil ve prim işlemleri. Cezanın hesabında sigortalı sayısı ve işe başlama tarihi esas alınır.</p>
+        <a class="dug ikinci" href="#uyum" style="justify-self:start;margin-top:.4rem">Benzer yükümlülükler</a>
+      </div>
+    </aside>
+  </div></div>
+
+  <div class="blok bant"><div class="ic">
+    <div class="bolumbas"><h2>ipece'yi oluşturan kurumlar</h2><a href="#kurumlar">Tümü</a></div>
+    <div class="uclu">
+      <article class="kurum">
+        <span class="rol">Uyuşmazlık çözümü</span>
+        <h3>IPMAC</h3>
+        <p>Uluslararası İhtisas Tahkim ve Arabuluculuk Merkezi. İhtisas tahkimi, arabuluculuk ve sulh sözleşmesiyle uyuşmazlık çözümü.</p>
+        <a class="git" href="#kurumlar">Kurum sayfası</a>
+      </article>
+      <article class="kurum">
+        <span class="rol">Hukuk ve uyum danışmanlığı</span>
+        <h3>Balrium</h3>
+        <p>Yaptırım envanteri, mevzuat makaleleri ve kurumlara uzman desteği. Yüksek tutarlı risklerde hukukçu sizi arar.</p>
+        <a class="git" href="#kurumlar">Kurum sayfası</a>
+      </article>
+      <article class="kurum">
+        <span class="rol">Kurum</span>
+        <h3>SS4Key</h3>
+        <p>Kurum tanıtımı yakında bu sayfada yayımlanacak.</p>
+        <a class="git" href="#kurumlar">Kurum sayfası</a>
+      </article>
+    </div>
+  </div></div>
+
+  <div class="blok"><div class="ic">
+    <h2>Uyum Merkezi nasıl çalışır?</h2>
+    <div class="surec">
+      <div class="adim"><span class="no">1</span><h3>Kurumunuzu bulun</h3><p>Kurum türünü, ili ve ilçeyi seçin, kurumunuzu listeden bulun.</p></div>
+      <div class="adim"><span class="no">2</span><h3>Yükümlülükleri görün</h3><p>Kurum türünüze uygulanan kanun maddeleri, ihlal hâlleri ve 2026 ceza tutarları listelenir.</p></div>
+      <div class="adim"><span class="no">3</span><h3>Uzmana ulaşın</h3><p>Sorunuzu yazın. Ceza tutarı yüksekse telefonunuzu bırakın, bir hukukçu sizi arasın.</p></div>
+    </div>
+  </div></div>
+
+  <div class="blok bant"><div class="ic iki">
+    <div>
+      <div class="bolumbas"><h2>Duyurular</h2><a href="#duyurular">Tümü</a></div>
+      <div class="liste">
+        <div class="satir"><time datetime="2026-11">Kasım 2026</time><div><h3>Uyum Merkezi'nin ilk alanı: özel eğitim ve rehabilitasyon merkezleri</h3><p>İlk aşamada İstanbul'daki merkezler için yaptırım rehberi hazırlanıyor.</p></div></div>
+        <div class="satir"><time datetime="2026-11">Kasım 2026</time><div><h3>ipece.org yayında</h3><p>IPMAC, Balrium ve SS4Key tek çatı altında buluşuyor.</p></div></div>
+      </div>
+    </div>
+    <div>
+      <div class="bolumbas"><h2>Mevzuat ve yayınlar</h2><a href="#yayinlar">Tümü</a></div>
+      <div class="liste">
+        <div class="satir"><span class="tur">Makale</span><div><h3>Muvazaalı alt işverenlikte idari para cezası ve iptal davası</h3><p>4857 sayılı İş Kanunu m.98</p></div></div>
+        <div class="satir"><span class="tur">Rehber</span><div><h3>Özel eğitim ve rehabilitasyon merkezleri: 2026 yaptırım envanteri</h3><p>9 kanun, madde madde ihlal ve tutar</p></div></div>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<!-- HAKKIMIZDA -->
+<section class="gor" id="v-hakkimizda" data-v="hakkimizda">
+  <div class="ic"><div class="kirinti"><a href="#ana">Ana sayfa</a> / Hakkımızda</div></div>
+  <div class="ic sayfa">
+    <article class="okuma">
+      <span class="etiket">Hakkımızda</span>
+      <h1>ipece</h1>
+      <p>Adımız, işimizin konusu olan <strong>İdari Para Cezası</strong>'nın baş harflerinden, İPC'den geliyor.</p>
+      <p>Kurumlar çoğu zaman bir yükümlülüğü, ceza tebliğ edildiğinde öğrenir. ipece bu sırayı tersine çevirmek için kuruldu. Bir kurumun tabi olduğu yükümlülükleri, ihlal hâlinde uygulanacak yaptırımı ve güncel tutarı ceza gelmeden önce görünür kılar.</p>
+      <h2>Nasıl çalışıyoruz?</h2>
+      <ul>
+        <li>Her bilgi bir kanun maddesine dayanır ve kaynağıyla birlikte gösterilir.</li>
+        <li>Tutarı somut olaya bağlı olan ya da doğrulanmamış bir cezayı kesin rakamla yazmayız.</li>
+        <li>Sitede verilen bilgi genel niteliktedir. Somut bir dosyada değerlendirmeyi hukukçu yapar.</li>
+        <li>Uyuşmazlık çıkarsa çözüm yolu IPMAC'ta, uzman desteği Balrium'da.</li>
+      </ul>
+    </article>
+    <dl class="kunye">
+      <div><dt>Alan adı</dt><dd>ipece.org</dd></div>
+      <div><dt>Kurumlar</dt><dd>IPMAC · Balrium · SS4Key</dd></div>
+      <div><dt>İlk alan</dt><dd>Özel eğitim ve rehabilitasyon merkezleri, İstanbul</dd></div>
+      <div><dt>Kanun kapsamı</dt><dd>9 kanun, 69 yaptırım maddesi</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- KURUMLAR -->
+<section class="gor" id="v-kurumlar" data-v="kurumlar">
+  <div class="ic"><div class="kirinti"><a href="#ana">Ana sayfa</a> / Kurumlarımız</div></div>
+  <div class="ic" style="padding-block:2rem 3.5rem">
+    <span class="etiket">Kurumlarımız</span>
+    <h1 style="margin-top:.6rem">Tek çatı, üç kurum</h1>
+    <p class="giris" style="color:var(--celik);max-width:60ch;margin-top:.8rem">ipece risk görünür olsun diye var. Riskin gerçeğe dönüştüğü yerde kurumlarımız devreye girer.</p>
+    <div class="uclu">
+      <article class="kurum">
+        <span class="rol">Uyuşmazlık çözümü</span>
+        <h2>IPMAC</h2>
+        <p>Uluslararası İhtisas Tahkim ve Arabuluculuk Merkezi.</p>
+        <p>Gayrimenkulden enerjiye, sağlıktan eğitim hukukuna kadar ihtisas alanlarında tahkim, zorunlu ve ihtiyari arabuluculuk ve sulh sözleşmesi hizmeti verir.</p>
+        <p><strong style="color:var(--murekkep)">ipece'de rolü:</strong> İdari yaptırımdan doğan ya da sözleşmeye dayanan bir uyuşmazlıkta çözüm yolunu sunar. Önleyici tahkim de buna dahildir.</p>
+      </article>
+      <article class="kurum">
+        <span class="rol">Hukuk ve uyum danışmanlığı</span>
+        <h2>Balrium</h2>
+        <p>Balrium Grup.</p>
+        <p>Kurumlara tabi oldukları idari yaptırımlar ve itiraz yolları konusunda danışmanlık verir.</p>
+        <p><strong style="color:var(--murekkep)">ipece'de rolü:</strong> Yaptırım envanterini ve makaleleri hazırlar, günceller. Yüksek tutarlı risklerde kurumu telefonla arar.</p>
+      </article>
+      <article class="kurum">
+        <span class="rol">Kurum</span>
+        <h2>SS4Key</h2>
+        <p>Kurum tanıtımı yakında bu sayfada yayımlanacak.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- UYUM MERKEZİ -->
+<section class="gor" id="v-uyum" data-v="uyum">
+  <div class="ic"><div class="kirinti"><a href="#ana">Ana sayfa</a> / Uyum Merkezi</div></div>
+  <div class="ic" style="padding-block:2rem 3.5rem">
+    <span class="etiket">Uyum Merkezi</span>
+    <h1 style="margin-top:.6rem">Kurumunuzun yaptırım riskleri</h1>
+    <p style="color:var(--celik);max-width:62ch;margin-top:.8rem">Kurum türünüzü ve kanunu seçin ya da bir madde arayın. Uygulanabilecek idari para cezaları 2026 tutarlarıyla listelenir.</p>
+    <div class="arac">
+      <form class="secim" onsubmit="event.preventDefault()">
+        <label for="s-tur">Kurum türü<select id="s-tur"><option>Özel eğitim ve rehabilitasyon merkezi</option></select></label>
+        <label for="s-ara">Madde veya konu<input id="s-ara" type="search" placeholder="Örnek: 102, ücret, engelli" autocomplete="off"></label>
+        <label for="s-kanun">Kanun<select id="s-kanun"><option value="">Tüm kanunlar</option></select></label>
+        <p class="not" id="sayac" aria-live="polite"></p>
+        <p class="not">İl, ilçe ve kurum seçimi kurum listesi yüklendiğinde açılacak.</p>
+      </form>
+      <div style="min-width:0">
+        <div class="tablo-kap">
+          <table>
+            <thead><tr><th>Madde</th><th>Yükümlülük</th><th>İhlal</th><th>Sonuç</th><th>2026 tutarı (TL)</th></tr></thead>
+            <tbody id="satirlar"></tbody>
+          </table>
+        </div>
+        <p class="uyari">Kaynak: Balrium, 2026 yaptırım envanteri. 4925 sayılı Kanun tutarları Bakanlık cetveline, 2872 sayılı Kanun tutarları 2026/1 sayılı Tebliğe dayanır. Kesin ceza kişi sayısı, defter türü gibi somut olay bilgileriyle hesaplanır.</p>
+        <div class="soru">
+          <h3>Sorunuzu yazın</h3>
+          <form id="soru-form">
+            <input id="soru" placeholder="Örnek: 4857/98'den ceza geldi, ne yapmalıyım?" aria-label="Sorunuz">
+            <button class="dug ana" type="submit">Sor</button>
+          </form>
+          <div class="cevap" id="cevap" hidden></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- YAYINLAR -->
+<section class="gor" id="v-yayinlar" data-v="yayinlar">
+  <div class="ic"><div class="kirinti"><a href="#ana">Ana sayfa</a> / Mevzuat ve yayınlar</div></div>
+  <div class="ic sayfa">
+    <article class="okuma">
+      <span class="etiket">Makale · 4857 sayılı İş Kanunu m.98</span>
+      <h1>Muvazaalı alt işverenlikte idari para cezası ve iptal davası</h1>
+      <p>Bir sözleşmenin alt işverenlik sözleşmesi olarak adlandırılması, o ilişkinin hukuken geçerli olduğu anlamına gelmez. 4857 sayılı İş Kanunu'nun 2. maddesi uyarınca asıl işverenin işçilerinin hakları kısıtlanarak alt işveren tarafından çalıştırılmaya devam ettirilmesi ya da daha önce aynı işyerinde çalıştırılan kişiyle alt işverenlik ilişkisi kurulması muvazaa şüphesi doğurur.</p>
+      <p>Muvazaa iddiası, idari para cezasının hukuka uygunluğunu tek başına kanıtlamaz. İptal incelemesinde ilişkinin gerçek niteliği, müfettiş raporunun dayanakları, tarafların savunmaları ve cezanın doğru kişiye yöneltilip yöneltilmediği belirleyicidir.</p>
+    </article>
+    <dl class="kunye">
+      <div><dt>Madde</dt><dd class="madde">4857 · m.98</dd></div>
+      <div><dt>2026 tutarı</dt><dd class="tutar" style="font-size:1.3rem">302.484 TL</dd></div>
+      <div><dt>Yazan</dt><dd>Balrium</dd></div>
+      <div><dt>Diğer yayınlar</dt><dd>Özel eğitim ve rehabilitasyon merkezleri: 2026 yaptırım envanteri</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- DUYURULAR -->
+<section class="gor" id="v-duyurular" data-v="duyurular">
+  <div class="ic"><div class="kirinti"><a href="#ana">Ana sayfa</a> / Duyurular</div></div>
+  <div class="ic" style="padding-block:2rem 3.5rem">
+    <span class="etiket">Duyurular</span>
+    <h1 style="margin-top:.6rem">Duyurular</h1>
+    <div class="liste">
+      <div class="satir"><time datetime="2026-11">Kasım 2026</time><div><h3>Uyum Merkezi'nin ilk alanı: özel eğitim ve rehabilitasyon merkezleri</h3><p>İlk aşamada İstanbul'daki merkezler için yaptırım rehberi hazırlanıyor. Diğer kurum türleri ve iller sırayla eklenecek.</p></div></div>
+      <div class="satir"><time datetime="2026-11">Kasım 2026</time><div><h3>ipece.org yayında</h3><p>IPMAC, Balrium ve SS4Key tek çatı altında buluşuyor.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- İLETİŞİM -->
+<section class="gor" id="v-iletisim" data-v="iletisim">
+  <div class="ic"><div class="kirinti"><a href="#ana">Ana sayfa</a> / İletişim</div></div>
+  <div class="ic sayfa">
+    <div class="okuma">
+      <span class="etiket">İletişim</span>
+      <h1>Bize ulaşın</h1>
+      <form class="form" id="iletisim-form">
+        <label for="f-ad">Ad soyad<input id="f-ad" autocomplete="name"></label>
+        <label for="f-kurum">Kurum<input id="f-kurum"></label>
+        <label for="f-tel">Telefon<input id="f-tel" type="tel" autocomplete="tel"></label>
+        <label for="f-konu">Konu<select id="f-konu"><option>Bir yaptırım hakkında soru</option><option>Tahkim veya arabuluculuk</option><option>Kurumsal iş birliği</option></select></label>
+        <label for="f-mesaj">Mesajınız<textarea id="f-mesaj"></textarea></label>
+        <button class="dug ana" type="submit" style="justify-self:start">Gönder</button>
+        <p class="durum" id="f-durum" hidden>Çevrim içi başvuru kısa süre içinde açılacak. Mesajınız gönderilmedi.</p>
+      </form>
+    </div>
+    <dl class="kunye">
+      <div><dt>Alan adı</dt><dd>ipece.org</dd></div>
+      <div><dt>Konular</dt><dd>İdari para cezası ve itiraz · Tahkim ve arabuluculuk · Kurumsal iş birliği</dd></div>
+    </dl>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="ic">
+    <div><div style="font:600 1.6rem/1 var(--serif);color:#fff">ipece</div><p style="margin-top:.7rem;max-width:36ch">İdari para cezası gelmeden önce yükümlülüklerinizi görün.</p></div>
+    <div><h4>ipece</h4><ul><li><a href="#hakkimizda">Hakkımızda</a></li><li><a href="#kurumlar">Kurumlarımız</a></li><li><a href="#duyurular">Duyurular</a></li></ul></div>
+    <div><h4>Hizmetler</h4><ul><li><a href="#uyum">Uyum Merkezi</a></li><li><a href="#yayinlar">Mevzuat ve yayınlar</a></li><li><a href="#iletisim">İletişim</a></li></ul></div>
+    <div><h4>Kurumlar</h4><ul><li>IPMAC</li><li>Balrium</li><li>SS4Key</li></ul></div>
+  </div>
+  <div class="alt-serit"><div class="ic"><span>© 2026 ipece.org</span><span>KVKK Aydınlatma Metni · Çerez Politikası</span></div></div>
+</footer>
+
+<script>
+const VERI=[["5510", "5510 · 102/a-1", "İşe giriş bildirgesi", "Süresinde bildirmeme", "Re'sen tescil ve prim işlemleri", "33.030 / kişi"], ["5510", "5510 · 102/a-2", "Kayıt dışı sigortalı", "Denetim veya kanuni tespit", "Re'sen tescil", "66.060 / kişi"], ["5510", "5510 · 102/a-3", "Tekrarlanan kayıt dışı istihdam", "Kanuni süre içinde yeniden tespit", "Prim tahakkuku", "165.150 / kişi"], ["5510", "5510 · 102/b-1", "İşyeri bildirgesi", "Bilanço esasına tabi işveren", "İşyeri tescili", "99.090"], ["5510", "5510 · 102/b-2", "İşyeri bildirgesi", "Diğer defterleri tutan işveren", "İşyeri tescili", "66.060"], ["5510", "5510 · 102/b-3", "İşyeri bildirgesi", "Defter tutma yükümlülüğü olmayan işveren", "İşyeri tescili", "33.030"], ["5510", "5510 · 102/c", "Prim ve hizmet bildirimleri", "Bildirgeyi geç veya eksik vermek", "Eksik primlerin tahakkuku", "4.128,75 / 6.606 / 16.515 / 66.060 katsayı karşılıkları"], ["5510", "5510 · 102/e", "Defter ve belge ibrazı", "Kayıtların ibraz edilmemesi", "Kayıt incelemesi", "99.090 / 198.180 / 396.360"], ["5510", "5510 · 102/e", "Geçersiz kayıt", "Kanunen geçersiz sayılan kayıt", "Kayıtların incelenmesi", "16.515 / ilgili ay katsayı karşılığı"], ["4857", "4857 · 98", "Muvazaalı alt işverenlik", "Muvazaalı ilişki", "İşverenlik işlemleri", "302.484"], ["4857", "4857 · 99/1-a", "Eşit davranma ihlali", "İşçiler arasında ayrımcılık", "Aykırılığın giderilmesi", "2.531 / işçi"], ["4857", "4857 · 99/1-b", "Geçici iş ilişkisi ihlali", "Kanuna aykırı geçici iş ilişkisi", "Aykırılığın giderilmesi", "4.235 / işçi"], ["4857", "4857 · 99", "Çalışma koşulları belgesi", "Yazılı belge verilmemesi", "Belge düzenlenmesi", "2.531 / işçi"], ["4857", "4857 · 99", "Çalışma belgesi", "Belge vermeme veya yanlış düzenleme", "Belge düzenlenmesi", "2.531 / işçi"], ["4857", "4857 · 100", "Toplu işçi çıkarma", "Md. 29'a aykırılık", "Bildirim işlemleri", "9.943 / işçi"], ["4857", "4857 · 101", "Engelli işçi kotası", "Kanuni kotanın karşılanmaması", "İstihdam yükümlülüğü", "37.748 / kişi / ay"], ["4857", "4857 · 102/a", "Ücret ve asgari ücret", "Eksik veya ödenmeyen ücret", "Ücret farkının ödenmesi", "2.734 / işçi / ay"], ["4857", "4857 · 102/b", "Ücret pusulası ve kesinti", "Md. 37–38 ihlalleri", "Belge ve ücret düzeltmesi", "9.943 / ilgili ihlal"], ["4857", "4857 · 102/c", "Fazla çalışma", "Md. 41'e aykırılık", "Ücret veya serbest zaman", "4.815 / işçi"], ["4857", "4857 · 103", "Yıllık izin", "İzin hakkının ihlali", "İzin ve ücret işlemleri", "4.815 / işçi"], ["4857", "4857 · 104", "Çalışma süreleri ve diğer yükümlülükler", "İlgili çalışma düzeni ihlali", "Aykırılığın giderilmesi", "26.620 / ilgili ihlal"], ["4857", "4857 · 107", "Denetimin engellenmesi", "Müfettişin görevini engellemek", "Denetimin sürdürülmesi", "241.992"], ["5378", "5378 · Geçici 3", "Erişilebilirlik ihlali", "Umuma açık yapının erişilebilirlik şartlarını karşılamaması", "Eksikliklerin giderilmesi", "2026 sınırı henüz doğrulanmadı"], ["6698", "6698 · 18/1-a", "Aydınlatma yükümlülüğü", "Md. 10'a aykırılık", "Aydınlatmanın düzeltilmesi", "85.437–1.709.200"], ["6698", "6698 · 18/1-b", "Veri güvenliği", "Md. 12'ye aykırılık", "Teknik ve idari tedbirler", "256.357–17.092.242"], ["6698", "6698 · 18/1-c", "Kurul kararına uymama", "Md. 15 kararına aykırılık", "Kararın yerine getirilmesi", "427.263–17.092.242"], ["6698", "6698 · 18/1-ç", "VERBİS", "Md. 16'ya aykırılık", "Kayıt ve bildirim", "341.809–17.092.242"], ["6698", "6698 · 18/1-d", "Yurt dışı aktarım bildirimi", "Md. 9/5'e aykırılık", "Bildirim işlemi", "90.308–1.806.377"], ["3194", "3194 · 42/2-a", "Ruhsatsız/aykırı yapı", "Ruhsatsız veya projeye aykırı imalat", "Yapı tatil işlemleri", "2026 birim tutarı × aykırı m²"], ["3194", "3194 · 42/2-b", "Alan üzerinden hesaplanamayan imalat", "İlgili imalat aykırılığı", "Aykırılığın giderilmesi", "İmalat bedelinin %20'si"], ["3194", "3194 · 42/2-c", "Artırımlı imar cezası", "Kanuni ağırlaştırıcı nedenler", "İmar işlemleri", "Temel ceza + artırım"], ["2872", "2872 · 20/h", "İşyeri gürültüsü", "Mevzuata aykırı işyeri gürültüsü", "Gürültünün giderilmesi", "139.746"], ["2872", "2872 · 20/h", "Ulaşım gürültüsü", "Araç kaynaklı gürültü", "Gürültünün giderilmesi", "41.820"], ["2872", "2872 · 20/h", "Şantiye vb. gürültüsü", "İlgili faaliyet kaynaklı gürültü", "Gürültünün giderilmesi", "419.509"], ["2872", "2872 · 20/j", "Toprağı atıkla kirletme", "Atıkların toprağa verilmesi", "Kirliliğin giderilmesi", "839.122"], ["2872", "2872 · 20/s", "Umuma açık yerde kirletme", "Kanunda tanımlanan kirletme fiili", "Kirliliğin giderilmesi", "8.687"], ["2872", "2872 · 20/b", "İzin yükümlülüğü ihlali", "Kanuni çevre iznine aykırılık", "İzin/faaliyet işlemleri", "839.122 / 1.678.359"], ["2872", "2872 · 20/m", "Çevre yönetimi yükümlülüğü", "İlgili hizmet yükümlülüğünün ihlali", "Çevre yönetimi işlemleri", "139.746 / 209.624"], ["2872", "2872 · 20/n", "Su koruma alanına atık bırakma", "Kanuni koruma alanı ihlali", "Kirliliğin giderilmesi", "1.678.359"], ["2872", "2872 · 20/r", "Özel çevresel ihlal", "Bentte tanımlanan fiil", "İlgili çevresel tedbir", "782.106–3.128.439"], ["6502", "6502 · 77", "Sözleşme ve bilgilendirme", "İlgili tüketici yükümlülüğüne aykırılık", "Sözleşmenin düzeltilmesi", "3.973 / ilgili işlem"], ["6502", "6502 · 6, 77", "Hizmet sunmaktan kaçınma", "Haklı sebep olmaksızın hizmet sunmama", "İhlalin giderilmesi", "En az 3.973; hizmet bedelinin %10'u"], ["6502", "6502 · 61, 77", "Aldatıcı reklam", "Yanıltıcı ticari reklam", "Reklamın durdurulması", "Mecra bazlı 2026 tarife"], ["6502", "6502 · 62, 77", "Haksız ticari uygulama", "Kanunda tanımlanan haksız uygulama", "Uygulamanın durdurulması", "Fiil bazlı 2026 tarife"], ["2918", "2918 · 36/3-a", "Ehliyetsiz araç kullanma", "Sürücü belgesi bulunmaması", "Trafik tedbirleri", "40.000"], ["2918", "2918 · 36/3-b", "Geri alınmış ehliyetle sürüş", "Geri alınmış belgeyle araç kullanma", "Trafik tedbirleri", "200.000"], ["2918", "2918 · 36/3-c", "İptal edilmiş ehliyetle sürüş", "İptal edilmiş belgeyle araç kullanma", "Trafik tedbirleri", "200.000"], ["2918", "2918 · 36/3", "Araç işleteninin sorumluluğu", "Ehliyetsiz kişiye araç kullandırma", "İşleten hakkında işlem", "40.000"], ["2918", "2918 · 46/2", "Şerit ve yol ihlalleri", "İlgili şerit/yol kuralına aykırılık", "Bende göre trafik tedbiri", "5.000 / 10.000 / 20.000 / 90.000"], ["2918", "2918 · 46/4", "Saldırı amaçlı takip", "Israrlı takip veya saldırı amacıyla araçtan inme", "Ehliyet ve araç tedbirleri", "180.000"], ["2918", "2918 · Ek 2/3-a", "İzinsiz yolcu taşımacılığı", "Belediye çalışma izni bulunmaması", "Trafikten men", "100.000"], ["2918", "2918 · Ek 2/3-b", "Faaliyet konusu dışında taşıma", "İzin kapsamı dışına çıkma", "İlgili trafik tedbirleri", "46.000"], ["2918", "2918 · Ek 2/3-c", "Güzergâh ihlali", "İzinli güzergâh dışında taşıma", "İlgili trafik tedbirleri", "20.000"], ["4925", "4925 · 26/1-a", "Yetki belgesiz taşımacılık", "Yetki belgesiz veya kapsam dışı faaliyet", "Faaliyete ilişkin işlemler", "21.333"], ["4925", "4925 · 26/1-a", "Kayıtsız taşıt", "Taşıtı belgeye kaydettirmemek", "Taşıt kayıt işlemleri", "10.666"], ["4925", "4925 · 26/1-b", "Taşımacı yükümlülüğü", "Md. 5/5'e aykırılık", "Aykırılığın giderilmesi", "10.666"], ["4925", "4925 · 26/1-c", "Taşımadan kaçınma", "Md. 5/6'ya aykırılık", "Aykırılığın giderilmesi", "10.666"], ["4925", "4925 · 26/1-ç", "Taşıma faaliyetini engelleme", "Md. 5/7'ye aykırılık", "Engellemenin sona erdirilmesi", "31.372"], ["4925", "4925 · 26/1-d", "Taşımacı yükümlülükleri", "Md. 6'nın ilgili fıkraları", "Aykırılığın giderilmesi", "10.666 / 6.274"], ["4925", "4925 · 26/1-e", "Taşıma güvenliği yükümlülükleri", "Md. 7'nin ilgili fıkraları", "Aykırılığın giderilmesi", "21.333 / 10.666 / 6.274"], ["4925", "4925 · 26/1-f", "Acente/komisyoncu ihlali", "İlgili faaliyet yükümlülüğü", "Aykırılığın giderilmesi", "31.372"], ["4925", "4925 · 26/1-g", "Ücret/zaman tarifesi", "Tarife yükümlülüğüne aykırılık", "Tarifenin düzeltilmesi", "10.666"], ["4925", "4925 · 26/1-ğ", "Farklı tarife uygulama", "Kanuni tarife ihlali", "Tarifenin düzeltilmesi", "10.666"], ["4925", "4925 · 26/1-h", "Tarife bulundurmama", "Görünür tarife bulundurmamak", "Tarifenin ilanı", "4.392"], ["4925", "4925 · 26/1-i", "Md. 14 ihlali", "Kanundaki özel taşıma yükümlülüğü", "İlgili işlemler", "10.666"], ["4925", "4925 · 26/1-j", "Terminal dışı indirme/bindirme", "Md. 32'ye aykırılık", "İlgili taşıma tedbirleri", "6.274"], ["4925", "4925 · 26/1-k", "İşletmeci yeterlilik belgesi", "Mesleki yeterlilik olmadan faaliyet", "Yeterlilik şartının sağlanması", "31.998"], ["4925", "4925 · 26/1-l", "Sürücü yeterlilik belgesi", "Belgesiz sürücünün araç kullanması", "Yeterlilik şartının sağlanması", "4.392 sürücü; 10.666 işleten"], ["4925", "4925 · 26/1-m", "Denetimde belge ibrazı", "Gerekli bilgi ve belgelerin ibraz edilmemesi", "Belgelerin sunulması", "3.764"]];
+const KANUN={"2872": "Çevre Kanunu", "2918": "Karayolları Trafik Kanunu", "3194": "İmar Kanunu", "4857": "İş Kanunu", "4925": "Karayolu Taşıma Kanunu", "5378": "Engelliler Hakkında Kanun", "5510": "Sosyal Sigortalar ve GSS Kanunu", "6502": "Tüketicinin Korunması Hakkında Kanun", "6698": "Kişisel Verilerin Korunması Kanunu"};
+const tb=document.getElementById('satirlar'),sk=document.getElementById('s-kanun'),sa=document.getElementById('s-ara'),sy=document.getElementById('sayac');
+Object.keys(KANUN).forEach(k=>{const o=document.createElement('option');o.value=k;o.textContent=k+' · '+KANUN[k];sk.appendChild(o);});
+const kat=s=>s.toLocaleLowerCase('tr');
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function ciz(){
+  const k=sk.value,q=kat(sa.value.trim());
+  const r=VERI.filter(x=>(!k||x[0]===k)&&(!q||kat(x.slice(1).join(' ')+' '+KANUN[x[0]]).includes(q)));
+  tb.innerHTML=r.map(x=>`<tr><td><span class="madde">${esc(x[1])}</span></td><td>${esc(x[2])}</td><td>${esc(x[3])}</td><td>${esc(x[4])}</td><td class="t">${esc(x[5])}</td></tr>`).join('')||'<tr><td colspan="5">Bu aramayla eşleşen madde yok.</td></tr>';
+  sy.textContent=r.length+' yaptırım maddesi listeleniyor.';
+}
+sk.addEventListener('change',ciz);sa.addEventListener('input',ciz);ciz();
+document.querySelector('.bas .ara').onsubmit=e=>{e.preventDefault();sa.value=document.getElementById('ust-ara').value;sk.value='';location.hash='uyum';ciz();};
+
+document.getElementById('soru-form').addEventListener('submit',e=>{
+  e.preventDefault();
+  const c=document.getElementById('cevap'),q=kat(document.getElementById('soru').value);
+  c.hidden=false;
+  const AD={'kvkk':'6698','kişisel veri':'6698','sgk':'5510','sigorta':'5510','iş kanunu':'4857','tüketici':'6502','imar':'3194','çevre':'2872','trafik':'2918','taşıma':'4925','engelliler':'5378'};
+  let no=(q.match(/\b(2872|2918|3194|4857|4925|5378|5510|6502|6698)\b/)||[])[1];
+  if(!no){const a=Object.keys(AD).find(k=>q.includes(k));if(a)no=AD[a];}
+  const md=(q.match(/\b\d{4}\s*(?:\/|sayılı kanun(?:un)?|m\.?|madde)\s*(\d{1,3})/)||q.match(/(?:madde|m\.)\s*(\d{1,3})/)||[])[1];
+  let r=VERI.filter(x=>(!no||x[0]===no)&&(!md||x[1].split('·')[1].trim().split(/[\/ ]/)[0]===md));
+  if(!md){
+    const BOS=['ceza','cezası','cezasi','geldi','nedir','ne','yapmalıyım','için','gibi','kanunu','kanun','sayılı','madde','hakkında'];
+    const w=q.replace(/[^\p{L}\p{N}\s]/gu,' ').split(/\s+/).filter(s=>s.length>3&&!BOS.includes(s)&&!/^\d+$/.test(s));
+    if(w.length){
+      const puan=x=>w.filter(s=>kat(x[2]+' '+x[3]+' '+x[4]).includes(s)).length;
+      const t=r.map(x=>[puan(x),x]).filter(p=>p[0]>0).sort((p1,p2)=>p2[0]-p1[0]);
+      if(t.length)r=t.map(p=>p[1]);else if(!no)r=[];
+    }else if(!no)r=[];
+  }
+  if(!r.length){c.innerHTML='Sorunuzla eşleşen bir madde bulamadık. Kanun numarasını ve maddeyi yazarsanız (örneğin "4857/98") ilgili yaptırımı gösteririz. Somut dosyanız için <a href="#iletisim">bize yazın</a>.';return;}
+  const n=r.length;r=r.slice(0,5);
+  c.innerHTML='<strong>İlgili '+(n>1?'maddeler':'madde')+(n>5?' (ilk 5 / '+n+')':'')+'</strong><ul style="margin:.5rem 0;padding-left:1.1rem">'+r.map(x=>`<li><span class="madde">${esc(x[1])}</span> · ${esc(x[2])}: ${esc(x[3])}. 2026 tutarı <strong style="color:var(--ceza)">${esc(x[5])} TL</strong>.</li>`).join('')+'</ul>Bu bilgi geneldir. Somut dosyanız için <a href="#iletisim">bize yazın</a>.';
+});
+
+const GOR=['ana','hakkimizda','kurumlar','uyum','yayinlar','duyurular','iletisim'];
+function goster(){
+  let h=(location.hash||'#ana').slice(1);if(!GOR.includes(h))h='ana';
+  document.querySelectorAll('.gor').forEach(s=>s.classList.toggle('acik',s.dataset.v===h));
+  document.querySelectorAll('.menu a').forEach(a=>a.getAttribute('href')==='#'+h?a.setAttribute('aria-current','page'):a.removeAttribute('aria-current'));
+  window.scrollTo(0,0);
+}
+addEventListener('hashchange',goster);goster();
+</script>
+
+</body>
+</html>
