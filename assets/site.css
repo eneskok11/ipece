@@ -230,6 +230,10 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .yan-kart .devam,.devam{font-weight:600;font-size:.95rem;text-decoration:none}
 .devam:hover{text-decoration:underline}
 
+.k-ust{display:grid;gap:.4rem;padding:.2rem 0 .6rem}
+.k-tutar{font:600 clamp(2.3rem,5vw,3.2rem)/1 var(--baslik);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.k-tutar.dogrulanmadi{font-size:1.4rem;font-style:italic}
+
 /* hesaplayıcı */
 .hesap{border:1px solid var(--cizgi);border-radius:16px;padding:1.3rem;display:grid;gap:1rem;background:#fff}
 .hesap .alanlar{display:flex;gap:1rem;flex-wrap:wrap}
@@ -455,6 +459,42 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px soli
 .sira li+li,.cevapsiz li+li{border-top:1px solid var(--cizgi)}
 .sira b{font-variant-numeric:tabular-nums}
 
+/* ---------- sade ana sayfa ---------- */
+.gizli{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.bas .ara{display:none}
+.bas-cta{margin-left:auto}
+.p-acilis{padding:clamp(4.5rem,11vw,8.5rem) 0 clamp(3rem,6vw,4.5rem);text-align:center}
+.p-acilis h1{font-size:clamp(2.6rem,7vw,5rem);line-height:1.02;letter-spacing:-.035em}
+.p-alt{font-size:clamp(1.1rem,2vw,1.3rem);color:var(--ikincil);margin:1.4rem auto 0;max-width:44ch}
+.p-soru{margin:2.4rem auto 0;max-width:600px;display:flex;background:#fff;border:1px solid var(--cizgi-2);border-radius:999px;padding:6px;box-shadow:0 10px 30px -18px rgba(15,44,92,.35)}
+.p-soru:focus-within{border-color:var(--lacivert);box-shadow:0 0 0 4px rgba(29,78,158,.12)}
+.p-soru input{flex:1;border:0;outline:none;font:inherit;font-size:1.05rem;padding:.6rem 1.1rem;background:none;min-width:0;color:var(--metin)}
+.p-soru .dugme{border-radius:999px;min-height:48px;padding:.7rem 1.5rem}
+.p-yanit{max-width:600px;margin:1rem auto 0;text-align:left}
+.p-ya-da{margin-top:1.3rem}
+.p-ya-da a{color:var(--ikincil);font-weight:500;text-decoration:none;border-bottom:1px solid var(--cizgi-2);padding-bottom:2px}
+.p-ya-da a:hover{color:var(--lacivert);border-color:var(--lacivert)}
+.p-urun{padding:1rem 0 clamp(4.5rem,9vw,7rem)}
+.p-kart{margin:0 auto;max-width:620px;background:var(--sahne);border-radius:28px;padding:clamp(1.4rem,4vw,2.6rem);display:grid;gap:1.1rem}
+.p-soru-balon{justify-self:end;background:var(--lacivert);color:#fff;padding:.65rem 1.05rem;border-radius:18px 18px 4px 18px;font-size:1rem}
+.p-cevap{background:#fff;border-radius:20px;padding:clamp(1.4rem,3.5vw,2.2rem);box-shadow:0 1px 2px rgba(14,26,51,.04)}
+.p-ref{font-size:.9rem;color:var(--ikincil)}
+.p-baslik{font:600 1.35rem/1.25 var(--baslik);margin-top:.35rem;letter-spacing:-.01em}
+.p-tutar{font:600 clamp(2.6rem,6vw,3.6rem)/1 var(--baslik);color:var(--kirmizi);letter-spacing:-.03em;margin-top:1.1rem;font-variant-numeric:tabular-nums}
+.p-not{font-size:.88rem;color:var(--soluk);margin-top:.7rem}
+.p-ayrac{height:1px;background:var(--cizgi);margin:1.5rem 0}
+.p-eylem{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;font-weight:500}
+.p-sayilar{border-top:1px solid var(--cizgi);border-bottom:1px solid var(--cizgi)}
+.p-sayilar .kap{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));text-align:center}
+.p-sayilar a{padding:clamp(2.2rem,5vw,3.6rem) .5rem;text-decoration:none;color:var(--metin);display:grid;gap:.35rem}
+.p-sayilar a+a{border-left:1px solid var(--cizgi)}
+.p-sayilar b{font:600 clamp(2.2rem,5vw,3.4rem)/1 var(--baslik);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.p-sayilar span{color:var(--ikincil);font-size:.95rem}
+.p-sayilar a:hover b{color:var(--lacivert)}
+.p-bant{padding:clamp(3.5rem,7vw,5.5rem) 0 clamp(1rem,3vw,2rem)}
+.p-bant .kap{display:flex;justify-content:center;align-items:center;gap:1rem 1.6rem;flex-wrap:wrap;font-size:1.15rem;color:var(--ikincil);text-align:center}
+.p-bant b{color:var(--metin)}
+
 /* duyarlı */
 @media (max-width:1120px){ .ara{display:none} }
 @media (max-width:960px){
@@ -479,6 +519,8 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px soli
   .bas .kap{min-height:64px;gap:.8rem}
   .logo img{height:38px}
   .bas-cta{display:none}
+  .p-soru{border-radius:16px}
+  .p-soru .dugme{border-radius:12px}
   .menu-dugme{display:inline-flex;align-items:center}
   .menu{display:none;position:absolute;left:0;right:0;top:100%;background:#fff;border-bottom:1px solid var(--cizgi);box-shadow:0 16px 32px -16px rgba(15,44,92,.25);padding:.8rem max(20px,env(safe-area-inset-left,0px)) 1.2rem}
   .menu.acik{display:grid;gap:.8rem}

@@ -38,85 +38,50 @@
 
 <main id="icerik">
 
-<div class="kap sahne-kap">
-<section class="sahne" aria-labelledby="ana-b">
-  <div class="sahne-sol">
-    <h1 id="ana-b">İdari para cezası gelmeden önce.</h1>
-    <p class="giris">Kurumunuzun yükümlülüklerini, 2026 tutarlarını ve itiraz yolunu tek yerde görün.</p>
-    <form class="soru-kutu" id="asistan-form" role="search">
-      <label for="asistan-soru">Derdinizi yazın</label>
-      <div class="soru-satir"><input id="asistan-soru" placeholder="Örnek: 4857/98'den ceza geldi" autocomplete="off"><button class="dugme" type="submit">Sor</button></div>
+<section class="p-acilis" aria-labelledby="ana-b">
+  <div class="kap">
+    <h1 id="ana-b">İdari para cezası<br>gelmeden önce.</h1>
+    <p class="p-alt">Kurumunuzun yükümlülüklerini ve 2026 tutarlarını görün.</p>
+    <form class="p-soru" id="asistan-form" role="search">
+      <label class="gizli" for="asistan-soru">Derdinizi yazın</label>
+      <input id="asistan-soru" placeholder="Derdinizi yazın" autocomplete="off">
+      <button class="dugme" type="submit">Sor</button>
     </form>
-    <div class="yanit" id="asistan-yanit" hidden aria-live="polite"></div>
-    <p class="ya-da">ya da <a class="dugme ikincil" href="kurumlar/">Kurumunuzu bulun</a></p>
-    <p class="guven"><span><b>9</b> kanun</span><span><b>69</b> yükümlülük</span><span><b>558</b> İstanbul kurumu</span><span>Kaynak: <b>Balrium</b></span></p>
-  </div>
-  <a class="urun" href="kurumlar/?k=ozel-akgunes-ozel-egitim-ve-rehabilitasyon-merkezi" aria-label="Örnek kurum sayfası: Özel Akgüneş Özel Eğitim ve Rehabilitasyon Merkezi" style="text-decoration:none;color:inherit">
-    <div class="urun-bas"><div><small>Kurum</small><b>Özel Akgüneş ÖERM · Arnavutköy</b></div><span class="cip acik">20 yüksek tutarlı madde</span></div>
-    <div class="urun-izgara">
-      <div class="urun-kutu"><h4>Kanunlara göre yükümlülük</h4><div class="cubuk-satir">4925<i><b style="width:100%"></b></i><em>16</em></div><div class="cubuk-satir">4857<i><b style="width:81%"></b></i><em>13</em></div><div class="cubuk-satir">2872<i><b style="width:56%"></b></i><em>9</em></div><div class="cubuk-satir">2918<i><b style="width:56%"></b></i><em>9</em></div><div class="cubuk-satir">5510<i><b style="width:56%"></b></i><em>9</em></div><div class="cubuk-satir">6698<i><b style="width:31%"></b></i><em>5</em></div><div class="cubuk-satir">6502<i><b style="width:25%"></b></i><em>4</em></div><div class="cubuk-satir">3194<i><b style="width:19%"></b></i><em>3</em></div><div class="cubuk-satir">5378<i><b style="width:6%"></b></i><em>1</em></div></div>
-      <div class="urun-kutu"><h4>Personel ve SGK</h4><div class="risk-satir"><span><span class="kod">4857 · 98</span><span class="ad">Muvazaalı alt işverenlik</span></span><span class="tutar">302.484 TL</span></div><div class="risk-satir"><span><span class="kod">5510 · 102/a-3</span><span class="ad">Tekrarlanan kayıt dışı istihdam</span></span><span class="tutar">165.150 TL / kişi</span></div><div class="risk-satir"><span><span class="kod">5510 · 102/b-1</span><span class="ad">İşyeri bildirgesi</span></span><span class="tutar">99.090 TL</span></div></div>
-    </div>
-    <div class="ornek-sohbet"><small>Örnek soru</small><span class="s">4857/98'den ceza geldi</span><span class="c">Muvazaalı alt işverenlik: 2026 tutarı <span class="tutar">302.484 TL</span>. Tutar yüksek; numaranızı bırakın, hukukçumuz sizi arasın.</span></div>
-  </a>
-</section>
-
-<section class="ozellikler" aria-label="Neler yapabilirsiniz">
-  <div class="ozellik">
-    <div class="mini" id="mini-hesap" data-satir="5510-102-a-1-ise-giris-bildirgesi">
-      <label for="mini-adet">İşe giriş bildirgesi verilmeyen kişi<input id="mini-adet" type="number" min="1" inputmode="numeric" value="4"></label>
-      <output for="mini-adet" id="mini-sonuc" aria-live="polite">132.120 TL</output>
-    </div>
-    <h3>Tutarı hesaplayın</h3>
-    <p>Kişi ve ay sayısıyla tahmini ceza. Asgari ücrete bağlı tutarlar kendiliğinden güncellenir.</p>
-    <a class="devam" href="yukumlulukler/?hesap=1">Hesaplanabilen 12 madde</a>
-  </div>
-  <div class="ozellik">
-    <div class="mini" aria-hidden="true">
-      <span class="adim-mini"><span>1</span>Tebliğ tarihini kaydedin</span>
-      <span class="adim-mini"><span>2</span>Dayanılan maddeyi bulun</span>
-      <span class="adim-mini k"><span>3</span>Birçok cezada süre 15 gün</span>
-    </div>
-    <h3>Ceza geldiyse</h3>
-    <p>Tebliğden itiraza hangi sırayla ne yapacağınız.</p>
-    <a class="devam" href="ceza-geldiyse/">Adımları görün</a>
-  </div>
-  <div class="ozellik">
-    <div class="mini" aria-hidden="true">
-      <span style="font:600 1.35rem var(--baslik)">558 kurum · 38 ilçe</span>
-      <span class="dugmeler"><span class="cip">Ümraniye 33</span><span class="cip">Bağcılar 30</span><span class="cip">Büyükçekmece 29</span></span>
-    </div>
-    <h3>Kurumunuzu bulun</h3>
-    <p>Tür, il ve ilçeyle kurumunuzu seçin; tabi olduğu yükümlülükleri görün.</p>
-    <a class="devam" href="kurumlar/">Kurumlar</a>
+    <div class="yanit p-yanit" id="asistan-yanit" hidden aria-live="polite"></div>
+    <p class="p-ya-da"><a href="kurumlar/">ya da kurumunuzu bulun</a></p>
   </div>
 </section>
-</div>
 
-<section class="bolum"><div class="kap iki">
-  <div>
-    <div class="bolum-bas"><div><h2>Kanunlara göre yükümlülükler</h2><p>Özel eğitim ve rehabilitasyon merkezleri için 9 kanun, 69 madde.</p></div></div>
-    <ul class="kanunlar"><li><a href="yukumlulukler/?kanun=4925"><span class="no">4925</span><span class="ad">Karayolu Taşıma Kanunu</span><span class="say">16 yükümlülük</span><span class="cubuk"><b style="width:100%"></b></span></a></li><li><a href="yukumlulukler/?kanun=4857"><span class="no">4857</span><span class="ad">İş Kanunu</span><span class="say">13 yükümlülük</span><span class="cubuk"><b style="width:81%"></b></span></a></li><li><a href="yukumlulukler/?kanun=2872"><span class="no">2872</span><span class="ad">Çevre Kanunu</span><span class="say">9 yükümlülük</span><span class="cubuk"><b style="width:56%"></b></span></a></li><li><a href="yukumlulukler/?kanun=2918"><span class="no">2918</span><span class="ad">Karayolları Trafik Kanunu</span><span class="say">9 yükümlülük</span><span class="cubuk"><b style="width:56%"></b></span></a></li><li><a href="yukumlulukler/?kanun=5510"><span class="no">5510</span><span class="ad">Sosyal Sigortalar ve Genel Sağlık Sigortası Kanunu</span><span class="say">9 yükümlülük</span><span class="cubuk"><b style="width:56%"></b></span></a></li><li><a href="yukumlulukler/?kanun=6698"><span class="no">6698</span><span class="ad">Kişisel Verilerin Korunması Kanunu</span><span class="say">5 yükümlülük</span><span class="cubuk"><b style="width:31%"></b></span></a></li><li><a href="yukumlulukler/?kanun=6502"><span class="no">6502</span><span class="ad">Tüketicinin Korunması Hakkında Kanun</span><span class="say">4 yükümlülük</span><span class="cubuk"><b style="width:25%"></b></span></a></li><li><a href="yukumlulukler/?kanun=3194"><span class="no">3194</span><span class="ad">İmar Kanunu</span><span class="say">3 yükümlülük</span><span class="cubuk"><b style="width:19%"></b></span></a></li><li><a href="yukumlulukler/?kanun=5378"><span class="no">5378</span><span class="ad">Engelliler Hakkında Kanun</span><span class="say">1 yükümlülük</span><span class="cubuk"><b style="width:6%"></b></span></a></li></ul>
+<section class="p-urun" aria-label="Asistanın cevabı">
+  <div class="kap">
+    <figure class="p-kart">
+      <div class="p-soru-balon">4857/98'den ceza geldi</div>
+      <div class="p-cevap">
+        <p class="p-ref">4857 sayılı İş Kanunu · m. 98</p>
+        <p class="p-baslik">Muvazaalı alt işverenlik</p>
+        <p class="p-tutar">302.484 TL</p>
+        <p class="p-not">2026 tutarı · Kaynak: Balrium</p>
+        <div class="p-ayrac"></div>
+        <div class="p-eylem"><span>Tutar yüksek. Hukukçumuz sizi arasın.</span><a class="dugme" href="yukumlulukler/4857-98-muvazaali-alt-isverenlik/#geri-arama">Beni arayın</a></div>
+      </div>
+    </figure>
   </div>
-  <div>
-    <div class="bolum-bas"><div><h2>Ceza geldiyse</h2><p>Süre tebliğ tarihinde başlar.</p></div><a href="ceza-geldiyse/">Tüm adımlar</a></div>
-    <ol class="zaman">
-      <li><span class="gun">Tebliğ günü</span><b>Tarihi kaydedin</b><p>Zarfın ya da e-Tebligatın ulaştığı gün.</p></li>
-      <li><span class="gun">İlk günler</span><b>Maddeyi ve tutarı kontrol edin</b><p>Doğru alt bent, doğru kişi ve ay sayısı.</p></li>
-      <li class="k"><span class="gun">Birçok cezada 15. gün</span><b>İtiraz süresi dolar</b><p>İtiraz mercii kanuna göre değişir.</p></li>
-    </ol>
-    <div class="cta-kart"><div><h3>Ceza mı geldi?</h3><p>Numaranızı bırakın, hukukçumuz dosyanızı sizinle değerlendirsin.</p></div><a class="dugme" href="iletisim/?konu=ceza">Uzmana sorun</a></div>
-  </div>
-</div></section>
+</section>
 
-<section class="bolum"><div class="kap">
-  <div class="bolum-bas"><div><h2>Çatı kurumlarımız</h2></div><a href="hakkimizda/">Hakkımızda</a></div>
-  <ul class="kurumlar">
-    <li><h3>IPMAC</h3><span class="rol">Uyuşmazlık çözümü</span><p>Uluslararası İhtisas Tahkim ve Arabuluculuk Merkezi: ihtisas tahkimi, arabuluculuk, sulh.</p></li>
-    <li><h3>Balrium</h3><span class="rol">Hukuk ve uyum danışmanlığı</span><p>Yaptırım envanterini ve makaleleri hazırlar, dosyası olan kurumlara uzman desteği verir.</p></li>
-    <li><h3>SS4Key</h3><span class="rol">Kurum</span><p>Kurum tanıtımı yakında bu sayfada yayımlanacak.</p></li>
-  </ul>
-</div></section>
+<section class="p-sayilar" aria-label="Kapsam">
+  <div class="kap">
+    <a href="yukumlulukler/"><b>69</b><span>yükümlülük</span></a>
+    <a href="yukumlulukler/"><b>9</b><span>kanun</span></a>
+    <a href="kurumlar/"><b>558</b><span>İstanbul kurumu</span></a>
+  </div>
+</section>
+
+<section class="p-bant">
+  <div class="kap">
+    <p><b>Ceza mı geldi?</b> Süre tebliğ gününde başlar.</p>
+    <a class="dugme ikincil" href="ceza-geldiyse/">Ne yapmalı</a>
+  </div>
+</section>
 
 </main>
 <footer class="alt">
