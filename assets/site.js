@@ -33,6 +33,19 @@
   var satirBt = function(x){ return x.kat && x.bt ? x.kat[0] * PARAM.au : x.bt; };
   var satirUst = function(x){ return x.kat ? Math.max.apply(null, x.kat) * PARAM.au : x.ust; };
   var bul = function(slug){ return V && V.satir.filter(function(x){ return x.slug === slug; })[0]; };
+  /* yaptırım defterinde (panel) yayınlanan düzeltmeler: tutarı katsayıya bağlı olmayan satırlar */
+  var DEFTER = depo.al("ipece-defter", {});
+  var sayilar = function(t){ return (String(t).match(/\d{1,3}(?:\.\d{3})*(?:,\d+)?/g) || []).filter(function(n){ return !/^20\d\d$/.test(n); }).map(function(n){ return parseFloat(n.replace(/\./g, "").replace(",", ".")); }); };
+  if (V) V.satir.forEach(function(x){
+    var d = DEFTER[x.slug];
+    if (d && d.yayinda && d.tutar && !x.kat) {
+      var dt = d.tutar.trim();
+      x.tutar = /TL/.test(dt) || !/^\d/.test(dt) ? dt : (/\s\//.test(dt) ? dt.replace(/\s\//, " TL /") : dt + " TL");
+      x.dogru = !/doğrulan/i.test(d.tutar);
+      var ns = sayilar(d.tutar); x.ust = ns.length ? Math.max.apply(null, ns) : null;
+      if (x.bt && ns.length === 1) x.bt = ns[0];
+    }
+  });
   if (V) {
     V.satir.forEach(function(x){ x.tutar = satirTutar(x); x.bt = satirBt(x); x.ust = satirUst(x); });
     Array.prototype.forEach.call(document.querySelectorAll("dd[data-satir]"), function(d){ var x = bul(d.getAttribute("data-satir")); if (x) d.textContent = x.tutar; });
@@ -60,7 +73,9 @@
     f.addEventListener("submit", function(ev){
       ev.preventDefault();
       var d = new FormData(f);
-      var t = talepEkle({ ad: d.get("ad"), tel: d.get("tel"), kurum: d.get("kurum"), kod: x ? x.kod : "", yuk: x ? x.yuk : "", tahmin: ust, esikUstu: esikUstu, sayfa: location.pathname });
+      var t = talepEkle({ ad: d.get("ad"), tel: d.get("tel"), kurum: d.get("kurum"), kod: x ? x.kod : "", yuk: x ? x.yuk : "", slug: x ? x.slug : "", tahmin: ust, esikUstu: esikUstu, sayfa: location.pathname,
+        sohbet: depo.al("ipece-son-sohbet", []), bildirim: "bagli-degil" });
+      try { var so = depo.al("ipece-sohbet", []); if (so[0]) { so[0].talep = true; depo.koy("ipece-sohbet", so); } } catch (_) {}
       var s = $(".ga-sonuc", kap); s.hidden = false; f.hidden = true;
       s.innerHTML = t ? "<strong>Talebiniz alındı.</strong> Talep numaranız " + t.id + ". Uzmanımız sizi arayacak.<br><span class=\"kucuk\">Önizleme: talep bu tarayıcıdaki yönetim paneline düştü. Balrium'a anlık bildirim henüz bağlı değil.</span>"
                       : "Talebiniz kaydedilemedi. Tarayıcınız yerel kaydı engelliyor olabilir; lütfen <a href=\"" + kok + "iletisim/\">iletişim sayfasından</a> yazın.";
@@ -114,13 +129,41 @@
     ad.addEventListener("input", hesapla); if (ay) ay.addEventListener("input", hesapla); hesapla();
   }
 
+  /* yüzdeli formül hesaplayıcı (ör. hizmet bedelinin %10'u, en az X) */
+  var hy = $("#hesap-yuzde");
+  if (hy) {
+    var oran = parseFloat(hy.getAttribute("data-oran")), enAz = parseFloat(hy.getAttribute("data-min")) || 0;
+    var hb = $("#hy-bedel"), ho = $("#hy-sonuc"), gaY = $("#geri-arama"), sonY = null;
+    var hyHesap = function(){
+      var b = parseFloat(hb.value);
+      var t = b > 0 ? Math.max(b * oran / 100, enAz) : null;
+      ho.textContent = t != null ? tl(t) : "—";
+      var u = t != null && t >= PARAM.esik;
+      if (gaY && u !== sonY && !$(".ga-sonuc:not([hidden])", gaY)) { sonY = u; geriArama(gaY, bul(gaY.getAttribute("data-satir")), t); }
+    };
+    hb.addEventListener("input", hyHesap); hyHesap();
+  }
+
+  /* panelde yayınlanan makale: künyenin altında görünür */
+  var ym = $("#yerel-makale");
+  if (ym) {
+    var mk = depo.al("ipece-makaleler", {})[ym.getAttribute("data-satir")];
+    if (mk && mk.yayinda && mk.metin) {
+      ym.hidden = false;
+      ym.className = "yerel-makale";
+      ym.innerHTML = "<p class=\"ust-baslik\">Makale · Balrium</p><h2>" + esc(mk.baslik) + "</h2>" +
+        mk.metin.split(/\n\s*\n|\n/).filter(function(p){ return p.trim(); }).map(function(p){ return "<p>" + esc(p.trim()) + "</p>"; }).join("") +
+        "<p class=\"kucuk\">Yayın: " + new Date(mk.yayinTarihi).toLocaleDateString("tr-TR") + " · Önizleme: bu makale panelden bu tarayıcıda yayınlandı.</p>";
+    }
+  }
+
   /* soru asistanı: yalnız yükümlülük kayıtlarından yanıt verir, her yanıt kaynağa bağlanır */
   var af = $("#asistan-form");
   if (af && V) af.addEventListener("submit", function(e){
     e.preventDefault();
     var c = $("#asistan-yanit"), q = kat($("#asistan-soru").value);
     c.hidden = false;
-    var AD = {"kvkk":"6698","kişisel veri":"6698","sgk":"5510","sigorta":"5510","iş kanunu":"4857","tüketici":"6502","imar":"3194","çevre":"2872","trafik":"2918","taşıma":"4925","engelliler":"5378"};
+    var AD = {"kvkk":"6698","kişisel veri":"6698","sgk":"5510","iş kanunu":"4857","tüketici":"6502","imar":"3194","çevre":"2872","trafik":"2918","taşıma":"4925","engelliler":"5378"};
     var no = (q.match(/\b(2872|2918|3194|4857|4925|5378|5510|6502|6698)\b/) || [])[1];
     if (!no) { var a = Object.keys(AD).filter(function(x){ return q.indexOf(x) >= 0; })[0]; if (a) no = AD[a]; }
     var md2 = (q.match(/\b\d{4}\s*(?:\/|sayılı kanun(?:un)?|m\.?|madde)\s*(\d{1,3})/) || q.match(/(?:madde|m\.)\s*(\d{1,3})/) || [])[1];
@@ -134,8 +177,15 @@
         if (t.length) r = t.map(function(p){ return p[1]; }); else if (!no) r = [];
       } else if (!no) r = [];
     }
+    /* sohbet kaydı: rapor (en çok sorulan maddeler, cevaplanamayan sorular) ve talebe eklenen sohbet için */
+    var hamSoru = $("#asistan-soru").value.trim();
+    var kayit = { t: new Date().toISOString(), soru: hamSoru, kodlar: r.slice(0, 5).map(function(x){ return x.kod; }), cevap: r.length > 0, sayfa: location.pathname };
+    var sl = depo.al("ipece-sohbet", []); sl.unshift(kayit); depo.koy("ipece-sohbet", sl.slice(0, 500));
+    var ss = depo.al("ipece-son-sohbet", []); ss.push({ soru: hamSoru, yanit: r.length ? r.slice(0, 3).map(function(x){ return x.kod + " " + x.yuk + " (" + x.tutar + ")"; }).join("; ") : "Eşleşen kayıt yok" });
+    depo.koy("ipece-son-sohbet", ss.slice(-6));
     if (!r.length) {
-      c.innerHTML = "Sorunuzla eşleşen bir kayıt bulamadık. Kanun ve madde numarasını yazarsanız (örneğin “4857/98”) ilgili yükümlülüğü gösteririz. Dosyanız için <a href=\"" + kok + "iletisim/\">bize yazın</a>.";
+      c.innerHTML = "<strong>Bu konuda kayıtlı bilgimiz yok.</strong> Kanun ve madde numarasını yazarsanız (örneğin “4857/98”) ilgili yükümlülüğü gösteririz. Ya da numaranızı bırakın, uzmanımız sizi arasın.<div id=\"as-ga\" style=\"margin-top:1rem\"></div>";
+      geriArama($("#as-ga", c), null);
       return;
     }
     /* tek madde bulunduysa: eksik veriyi (kişi/ay) sor, tahmini tutarı hesapla, eşik üstündeyse geri arama öner */

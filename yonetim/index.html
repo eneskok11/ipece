@@ -19,7 +19,8 @@
 </head>
 <body>
 <a class="atla" href="#icerik">İçeriğe geç</a>
-<header class="bas">
+<header class="panel-ust"><div class="kap"><a class="logo" href="../" aria-label="ipece ana sayfa"><img src="../assets/logo-koyu.svg" alt="ipece" width="200" height="62"></a><span class="panel-ad">Yönetim</span><a class="panel-site" href="../">Siteyi açın</a></div></header>
+<header class="bas" hidden>
   <div class="kap">
     <a class="logo" href="../" aria-label="ipece ana sayfa"><img src="../assets/logo.svg" alt="ipece" width="200" height="62"></a>
     <form class="ara" role="search" action="../yukumlulukler/">
@@ -29,18 +30,18 @@
     <button class="menu-dugme" type="button" aria-expanded="false" aria-controls="ana-menu">Menü</button>
   </div>
 </header>
-<nav class="menu" id="ana-menu" aria-label="Ana menü">
+<nav class="menu" id="ana-menu" aria-label="Ana menü" hidden>
   <div class="kap">
     <form class="mobil-ara" role="search" action="../yukumlulukler/"><input type="search" name="q" placeholder="Madde ya da konu ara" aria-label="Yükümlülüklerde ara"><button type="submit">Ara</button></form>
     <ul><li><a href="../kurumlar/">Kurumlar</a></li><li><a href="../yukumlulukler/">Yükümlülükler</a></li><li><a href="../ceza-geldiyse/">Ceza geldiyse</a></li><li><a href="../yayinlar/">Yayınlar</a></li><li><a href="../iletisim/">İletişim</a></li></ul>
   </div>
 </nav>
-<nav class="yol kap" aria-label="Yol izi"><ol><li><a href="../">Ana sayfa</a></li><li aria-current="page">Yönetim</li></ol></nav>
+
 <main id="icerik">
 
 <div class="kap panel" style="padding-block:1.6rem 4rem">
   <div class="panel-bas">
-    <div><p class="ust-baslik">Yönetim</p><h1 style="font-size:clamp(1.7rem,3.5vw,2.4rem)">ipece yönetim paneli</h1></div>
+    <h1 style="font-size:clamp(1.6rem,3vw,2.1rem)">Yönetim paneli</h1>
     <p class="onizleme-not" role="note">Önizleme: Bu paneldeki veriler yalnız bu tarayıcıda tutulur, sunucuya gönderilmez.</p>
   </div>
   <div class="sekmeler" role="tablist" aria-label="Panel bölümleri">
@@ -48,16 +49,22 @@
     <button role="tab" id="t-talep" aria-controls="p-talep" aria-selected="false">Talepler <span id="talep-say"></span></button>
     <button role="tab" id="t-kurum" aria-controls="p-kurum" aria-selected="false">Kurumlar</button>
     <button role="tab" id="t-excel" aria-controls="p-excel" aria-selected="false">Excel ile eşleştir</button>
+    <button role="tab" id="t-defter" aria-controls="p-defter" aria-selected="false">Yaptırım defteri</button>
+    <button role="tab" id="t-makale" aria-controls="p-makale" aria-selected="false">Makaleler</button>
+    <button role="tab" id="t-rapor" aria-controls="p-rapor" aria-selected="false">Rapor</button>
     <button role="tab" id="t-param" aria-controls="p-param" aria-selected="false">Tutar parametreleri</button>
   </div>
   <section role="tabpanel" id="p-ozet" aria-labelledby="t-ozet"></section>
   <section role="tabpanel" id="p-talep" aria-labelledby="t-talep" hidden></section>
   <section role="tabpanel" id="p-kurum" aria-labelledby="t-kurum" hidden></section>
   <section role="tabpanel" id="p-excel" aria-labelledby="t-excel" hidden></section>
+  <section role="tabpanel" id="p-defter" aria-labelledby="t-defter" hidden></section>
+  <section role="tabpanel" id="p-makale" aria-labelledby="t-makale" hidden></section>
+  <section role="tabpanel" id="p-rapor" aria-labelledby="t-rapor" hidden></section>
   <section role="tabpanel" id="p-param" aria-labelledby="t-param" hidden></section>
 </div>
 </main>
-<footer class="alt">
+<footer class="alt" hidden>
   <div class="kap">
     <div>
       <a class="logo" href="../" aria-label="ipece ana sayfa"><img src="../assets/logo-koyu.svg" alt="ipece" width="200" height="62"></a>

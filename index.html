@@ -44,7 +44,12 @@
       <p class="ust-baslik">İdari para cezası önleme ve uyum</p>
       <h1 style="margin-top:.7rem">İdari para cezası gelmeden önce.</h1>
       <p class="giris">Kurumunuzun hangi yükümlülükler nedeniyle yaptırım riski taşıdığını, kanun maddesi ve 2026 tutarıyla görün.</p>
-      <a class="dugme" href="kurumlar/">Kurumunuzu bulun</a>
+      <form class="ana-soru" id="asistan-form" role="search">
+        <label for="asistan-soru">Derdinizi yazın</label>
+        <div class="ana-soru-satir"><input id="asistan-soru" placeholder="Örnek: 4857/98'den ceza geldi" autocomplete="off"><button class="dugme" type="submit">Sor</button></div>
+      </form>
+      <p class="ya-da">ya da <a class="dugme ikincil" href="kurumlar/">Kurumunuzu bulun</a></p>
+      <div class="yanit" id="asistan-yanit" hidden aria-live="polite" style="margin-top:1rem"></div>
     </div>
     <article class="kunye" aria-label="Örnek yükümlülük künyesi">
       <div class="kunye-bas"><span class="kod">5510 · 102/a-1</span><span class="kucuk">Sosyal Sigortalar ve GSS Kanunu</span></div>
@@ -117,6 +122,6 @@
   <div class="cati"><div class="kap">Çatı kurumlarımız <span>IPMAC</span><span>Balrium</span><span>SS4Key</span></div></div>
   <div class="son"><div class="kap"><span>© 2026 ipece</span><span>Tutarlar: Balrium 2026 yaptırım envanteri · Son güncelleme 23.11.2026</span></div></div>
 </footer>
-<script src="assets/site.js" defer></script>
+<script src="assets/veri.js" defer></script><script src="assets/site.js" defer></script>
 </body>
 </html>
