@@ -575,3 +575,78 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px soli
   .alt{background:#fff;color:#000}
   .alt a{color:#000}
 }
+
+/* ===================== elit katman: ince büyük başlık, köşeli düğme, sakin yüzeyler ===================== */
+@font-face{font-family:"ipece Display";src:url("font/inter-display-400.woff2") format("woff2");font-weight:400;font-display:swap}
+:root{--metin:#0B1430;--golge-pencere:0 40px 80px -30px rgba(3,10,30,.55),0 0 0 1px rgba(255,255,255,.06)}
+h1{font-weight:400;letter-spacing:-.04em}
+h2{font-weight:400;letter-spacing:-.025em}
+.dugme{border-radius:8px;font-weight:500}
+.cip{font-weight:500}
+.menu a{font-weight:400;color:var(--ikincil)}
+.menu a:hover{color:var(--metin);background:none}
+.menu a[aria-current="page"]{background:none;color:var(--metin);font-weight:500}
+.bas{border-bottom-color:transparent}
+.bas .kap{min-height:76px}
+.k-tutar{font-weight:400;letter-spacing:-.035em}
+.kunye dd.tutar,.hesap output,.talep-tutar b,.olcu b{font-weight:400}
+
+/* açılış: solda dev başlık, sağda tek cümle ve tek eylem */
+.e-acilis{padding:clamp(3.5rem,8vw,6.5rem) 0 clamp(2.5rem,5vw,4rem)}
+.e-acilis-ic{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr);gap:clamp(2rem,5vw,5rem);align-items:end}
+.e-acilis h1{font-size:clamp(3rem,6.8vw,5.6rem);line-height:.98;max-width:11ch}
+.e-sag{display:grid;gap:0;padding-bottom:.6rem}
+.e-sag p{font-size:1.1rem;line-height:1.6;color:var(--ikincil)}
+.e-soru{display:flex;margin-top:1.6rem;border:1px solid var(--cizgi-2);border-radius:10px;padding:5px;background:#fff}
+.e-soru:focus-within{border-color:var(--metin);box-shadow:0 0 0 4px rgba(15,44,92,.08)}
+.e-soru input{flex:1;min-width:0;border:0;outline:none;font:inherit;font-size:1rem;padding:.55rem .8rem;background:none;color:var(--metin)}
+.e-soru .dugme{border-radius:7px;min-height:44px;padding:.6rem 1.2rem}
+.e-yanit{margin-top:.9rem}
+.e-bag{justify-self:start;margin-top:1.1rem;color:var(--metin);font-weight:500;text-decoration:underline;text-decoration-color:var(--cizgi-2);text-underline-offset:.3em}
+.e-bag:hover{text-decoration-color:var(--metin);color:var(--metin)}
+
+/* sahne: ince dokulu lacivert zemin üzerinde ürün penceresi */
+.e-zemin{overflow:hidden;border-radius:14px;background-color:#0F2C5C;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");padding:clamp(2.5rem,7vw,5.5rem) clamp(1rem,4vw,3rem);display:grid;place-items:center}
+.e-pencere{margin:0;width:100%;max-width:700px;background:#fff;border-radius:12px;box-shadow:var(--golge-pencere);overflow:hidden}
+.e-pencere-bas{display:flex;align-items:center;gap:.6rem;padding:.8rem 1.2rem;border-bottom:1px solid var(--cizgi);font-size:.85rem;color:var(--ikincil)}
+.e-nokta{width:8px;height:8px;border-radius:50%;background:var(--kirmizi)}
+.e-pencere-govde{padding:clamp(1.2rem,3vw,2rem);display:grid;gap:.9rem}
+.e-mesaj-s{justify-self:end;background:var(--sahne);color:var(--metin);padding:.6rem .95rem;border-radius:10px;font-size:.97rem}
+.e-mesaj-c{border:1px solid var(--cizgi);border-radius:10px;padding:clamp(1.1rem,2.6vw,1.6rem)}
+.e-ref{font-size:.85rem;color:var(--ikincil)}
+.e-ad{font-size:1.12rem;font-weight:500;margin-top:.3rem}
+.e-tutar{font:400 clamp(2.6rem,6vw,3.8rem)/1 var(--baslik);letter-spacing:-.04em;color:var(--kirmizi);margin-top:.9rem;font-variant-numeric:tabular-nums}
+.e-not{font-size:.85rem;color:var(--soluk);margin-top:.6rem}
+.e-kucuk-kart{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;padding:.9rem 1rem .9rem 1.2rem}
+
+/* sayılar: büyük, ince, çizgisiz kutu */
+.e-sayilar .kap{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(1.5rem,4vw,3.5rem);padding-block:clamp(4rem,8vw,6.5rem)}
+.e-sayilar a{text-decoration:none;color:var(--metin);display:grid;gap:.7rem;align-content:start;border-top:1px solid var(--metin);padding-top:1.3rem}
+.e-sayilar b{font:400 clamp(3rem,6vw,4.6rem)/1 var(--baslik);letter-spacing:-.045em;font-variant-numeric:tabular-nums}
+.e-sayilar span{color:var(--ikincil);max-width:26ch}
+.e-sayilar a:hover b{color:var(--lacivert)}
+
+/* tek satırlık kapanış */
+.e-bant .kap{padding-block:clamp(1rem,3vw,2rem) clamp(3.5rem,7vw,5rem);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr) auto;gap:1.2rem 2.5rem;align-items:center}
+.e-bant h2{font-size:clamp(1.8rem,3.4vw,2.6rem);line-height:1.1}
+.e-bant p{color:var(--ikincil);font-size:1.05rem}
+
+/* alt bilgi: açık ve sade */
+.alt{background:var(--yuzey);color:var(--ikincil);border-top:1px solid var(--cizgi)}
+.alt a{color:var(--metin)}
+.alt h2{color:var(--metin);font-weight:500}
+.alt .cati,.alt .son{border-top-color:var(--cizgi)}
+.alt .cati span{color:var(--metin);font-weight:500}
+
+@media (max-width:960px){
+  .e-acilis-ic{grid-template-columns:minmax(0,1fr);gap:1.6rem}
+  .e-acilis h1{max-width:12ch}
+  .e-bant .kap{grid-template-columns:minmax(0,1fr)}
+  .e-bant .dugme{justify-self:start}
+}
+@media (max-width:640px){
+  .e-sayilar .kap{grid-template-columns:minmax(0,1fr);gap:2rem}
+  .e-zemin{padding:1.6rem .8rem;border-radius:12px}
+  .e-pencere-govde{padding:1rem}
+}
+@media print{ .e-zemin{background:#fff;padding:0} .e-soru{display:none} }
