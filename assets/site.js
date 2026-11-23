@@ -16,6 +16,60 @@
 
   var V = window.IPECE;
 
+  /* ---------- F1 tutar motoru: 5510 tutarları katsayı × asgari ücret ---------- */
+  var depo = {
+    al: function(a, v){ try { var x = localStorage.getItem(a); return x === null ? v : JSON.parse(x); } catch (_) { return v; } },
+    koy: function(a, v){ try { localStorage.setItem(a, JSON.stringify(v)); return true; } catch (_) { return false; } }
+  };
+  var PARAM = { au: (V && V.au) || 33030, esik: (V && V.esik) || 100000 };
+  var kayitli = depo.al("ipece-param", null);
+  if (kayitli) { if (kayitli.au > 0) PARAM.au = kayitli.au; if (kayitli.esik > 0) PARAM.esik = kayitli.esik; }
+  var sayiYaz = function(n){ return n.toLocaleString("tr-TR", {minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2}); };
+  var satirTutar = function(x){
+    if (!x.kat || !x.tpl) return x.tutar;
+    var t = x.tpl.replace(/\{(\d+)\}/g, function(_, i){ return sayiYaz(Math.round(x.kat[+i] * PARAM.au * 100) / 100); });
+    return /^[\d.,\s\/–]+$/.test(t) ? t + " TL" : t.replace(" /", " TL /");
+  };
+  var satirBt = function(x){ return x.kat && x.bt ? x.kat[0] * PARAM.au : x.bt; };
+  var satirUst = function(x){ return x.kat ? Math.max.apply(null, x.kat) * PARAM.au : x.ust; };
+  var bul = function(slug){ return V && V.satir.filter(function(x){ return x.slug === slug; })[0]; };
+  if (V) {
+    V.satir.forEach(function(x){ x.tutar = satirTutar(x); x.bt = satirBt(x); x.ust = satirUst(x); });
+    Array.prototype.forEach.call(document.querySelectorAll("dd[data-satir]"), function(d){ var x = bul(d.getAttribute("data-satir")); if (x) d.textContent = x.tutar; });
+    var hsx = $("#hesap[data-satir]"); if (hsx) { var hx = bul(hsx.getAttribute("data-satir")); if (hx && hx.bt) hsx.setAttribute("data-bt", hx.bt); }
+  }
+  window.IPECE_PARAM = PARAM;
+
+  /* ---------- F3 geri arama: eşik üstü tutarda telefon alınır, talep panele düşer ---------- */
+  var talepEkle = function(t){
+    var l = depo.al("ipece-talepler", []);
+    t.id = "T" + Date.now().toString(36).toUpperCase(); t.tarih = new Date().toISOString(); t.durum = "Yeni";
+    l.unshift(t); return depo.koy("ipece-talepler", l) ? t : null;
+  };
+  var geriArama = function(kap, x, tahmin){
+    var ust = tahmin != null ? tahmin : (x ? x.ust : null);
+    var esikUstu = ust != null && ust >= PARAM.esik;
+    var baslik = esikUstu ? "Bu tutar yüksek: hukukçumuz sizi arasın" : "Bu madde için hukukçumuz sizi arasın";
+    var aciklama = esikUstu ? "Tahmini tutar " + sayiYaz(ust) + " TL. Telefonunuzu bırakın, uzmanımız dosyanızı sizinle değerlendirsin." : "Telefonunuzu bırakın, uzmanımız sizi arasın.";
+    kap.innerHTML = "<section class=\"geri-arama" + (esikUstu ? " esik" : "") + "\" aria-labelledby=\"ga-b\"><h2 id=\"ga-b\">" + baslik + "</h2><p>" + aciklama + "</p>" +
+      "<form class=\"ga-form\"><label>Ad soyad<input name=\"ad\" autocomplete=\"name\" required></label><label>Telefon<input name=\"tel\" type=\"tel\" inputmode=\"tel\" autocomplete=\"tel\" required pattern=\"[0-9 +()\\-]{10,}\"></label>" +
+      "<label class=\"tam\">Kurum<input name=\"kurum\" autocomplete=\"organization\" value=\"" + esc(depo.al("ipece-son-kurum", "")) + "\"></label>" +
+      "<label class=\"onay tam\"><input type=\"checkbox\" name=\"onay\" required> Telefon numaramın yalnız bu talep için aranmak amacıyla kullanılmasını kabul ediyorum.</label>" +
+      "<button class=\"dugme\" type=\"submit\">Beni arayın</button></form><div class=\"ga-sonuc\" role=\"status\" hidden></div></section>";
+    var f = $(".ga-form", kap);
+    f.addEventListener("submit", function(ev){
+      ev.preventDefault();
+      var d = new FormData(f);
+      var t = talepEkle({ ad: d.get("ad"), tel: d.get("tel"), kurum: d.get("kurum"), kod: x ? x.kod : "", yuk: x ? x.yuk : "", tahmin: ust, esikUstu: esikUstu, sayfa: location.pathname });
+      var s = $(".ga-sonuc", kap); s.hidden = false; f.hidden = true;
+      s.innerHTML = t ? "<strong>Talebiniz alındı.</strong> Talep numaranız " + t.id + ". Uzmanımız sizi arayacak.<br><span class=\"kucuk\">Önizleme: talep bu tarayıcıdaki yönetim paneline düştü. Balrium'a anlık bildirim henüz bağlı değil.</span>"
+                      : "Talebiniz kaydedilemedi. Tarayıcınız yerel kaydı engelliyor olabilir; lütfen <a href=\"" + kok + "iletisim/\">iletişim sayfasından</a> yazın.";
+    });
+  };
+  var ga = $("#geri-arama");
+  if (ga && V) geriArama(ga, bul(ga.getAttribute("data-satir")));
+  window.IPECE_GERIARAMA = geriArama;
+
   /* yükümlülük listesi */
   var tb = $("#liste-govde");
   if (tb && V) {
@@ -49,9 +103,13 @@
   if (hs) {
     var bt = parseFloat(hs.getAttribute("data-bt")), ayli = hs.hasAttribute("data-ay");
     var ad = $("#h-adet"), ay = $("#h-ay"), out = $("#h-sonuc");
+    var gaKap = $("#geri-arama"), gaDurum = null;
     var hesapla = function(){
       var a = parseInt(ad.value, 10) || 0, m = ayli ? (parseInt(ay.value, 10) || 0) : 1;
-      out.textContent = (a > 0 && m > 0) ? tl(bt * a * m) : "—";
+      var top = (a > 0 && m > 0) ? bt * a * m : null;
+      out.textContent = top != null ? tl(top) : "—";
+      var ust = top != null && top >= PARAM.esik;
+      if (gaKap && ust !== gaDurum && !$(".ga-sonuc:not([hidden])", gaKap)) { gaDurum = ust; geriArama(gaKap, bul(gaKap.getAttribute("data-satir")), top); }
     };
     ad.addEventListener("input", hesapla); if (ay) ay.addEventListener("input", hesapla); hesapla();
   }
@@ -80,12 +138,119 @@
       c.innerHTML = "Sorunuzla eşleşen bir kayıt bulamadık. Kanun ve madde numarasını yazarsanız (örneğin “4857/98”) ilgili yükümlülüğü gösteririz. Dosyanız için <a href=\"" + kok + "iletisim/\">bize yazın</a>.";
       return;
     }
+    /* tek madde bulunduysa: eksik veriyi (kişi/ay) sor, tahmini tutarı hesapla, eşik üstündeyse geri arama öner */
+    if (r.length === 1) {
+      var x = r[0];
+      var kisi = (q.match(/(\d+)\s*(kişi|işçi|çalışan|personel|sigortalı)/) || [])[1];
+      var ayS = (q.match(/(\d+)\s*ay\b/) || [])[1];
+      c.innerHTML = "<strong>İlgili yükümlülük</strong><p style=\"margin-top:.4rem\"><a href=\"" + kok + "yukumlulukler/" + x.slug + "/\"><span class=\"kod\">" + esc(x.kod) + "</span> " + esc(x.yuk) + "</a>: " + esc(x.ihlal) + ". 2026 tutarı " +
+        (x.dogru ? "<span class=\"tutar\">" + esc(x.tutar) + "</span>" : "<span class=\"dogrulanmadi\">" + esc(x.tutar) + "</span>") + ".</p>" +
+        (x.bt ? "<div class=\"eksik\"><label>" + (x.birim === "işçi" ? "Kaç çalışan için?" : "Kaç kişi için?") + "<input id=\"as-adet\" type=\"number\" min=\"1\" inputmode=\"numeric\" value=\"" + (kisi || "") + "\"></label>" +
+          (x.ay ? "<label>Kaç ay?<input id=\"as-ay\" type=\"number\" min=\"1\" inputmode=\"numeric\" value=\"" + (ayS || "1") + "\"></label>" : "") +
+          "<p>Tahmini toplam: <output id=\"as-top\" class=\"tutar\">—</output></p></div>" : "") +
+        "<div id=\"as-ga\"></div><span class=\"kucuk\">Kaynak: Balrium 2026 yaptırım envanteri. Bu yanıt genel bilgidir.</span>";
+      var gaK = $("#as-ga", c);
+      if (x.bt) {
+        var aI = $("#as-adet", c), mI = $("#as-ay", c), oT = $("#as-top", c), son = null;
+        var guncelle = function(){
+          var a = parseInt(aI.value, 10) || 0, m = mI ? (parseInt(mI.value, 10) || 0) : 1;
+          var top = a > 0 && m > 0 ? x.bt * a * m : null;
+          oT.textContent = top != null ? tl(top) : "—";
+          var u = top != null && top >= PARAM.esik;
+          if (u !== son && !$(".ga-sonuc:not([hidden])", gaK)) { son = u; if (u) geriArama(gaK, x, top); else gaK.innerHTML = ""; }
+        };
+        aI.addEventListener("input", guncelle); if (mI) mI.addEventListener("input", guncelle); guncelle();
+        if (!kisi) aI.focus();
+      } else if (x.ust != null && x.ust >= PARAM.esik) {
+        geriArama(gaK, x);
+      }
+      return;
+    }
     var n = r.length; r = r.slice(0, 5);
     c.innerHTML = "<strong>" + (n > 1 ? "İlgili yükümlülükler" : "İlgili yükümlülük") + (n > 5 ? " (ilk 5 / " + n + ")" : "") + "</strong><ul>" +
       r.map(function(x){ return "<li><a href=\"" + kok + "yukumlulukler/" + x.slug + "/\"><span class=\"kod\">" + esc(x.kod) + "</span> " + esc(x.yuk) + "</a>: " + esc(x.ihlal) + ". 2026 tutarı " +
         (x.dogru ? "<span class=\"tutar\">" + esc(x.tutar) + "</span>" : "<span class=\"dogrulanmadi\">" + esc(x.tutar) + "</span>") + ".</li>"; }).join("") +
       "</ul><span class=\"kucuk\">Kaynak: Balrium 2026 yaptırım envanteri. Bu yanıt genel bilgidir; somut dosyanız için <a href=\"" + kok + "iletisim/\">bize yazın</a>.</span>";
   });
+
+  /* ---------- F2 seçmeli panel: kurum türü → il (yazarak) → ilçe → kurum → kanun ---------- */
+  var K = window.IPECE_K;
+  var kl = $("#k-liste");
+  if (kl && K && V) {
+    var IL = ["Adana","Adıyaman","Afyonkarahisar","Ağrı","Aksaray","Amasya","Ankara","Antalya","Ardahan","Artvin","Aydın","Balıkesir","Bartın","Batman","Bayburt","Bilecik","Bingöl","Bitlis","Bolu","Burdur","Bursa","Çanakkale","Çankırı","Çorum","Denizli","Diyarbakır","Düzce","Edirne","Elazığ","Erzincan","Erzurum","Eskişehir","Gaziantep","Giresun","Gümüşhane","Hakkari","Hatay","Iğdır","Isparta","İstanbul","İzmir","Kahramanmaraş","Karabük","Karaman","Kars","Kastamonu","Kayseri","Kilis","Kırıkkale","Kırklareli","Kırşehir","Kocaeli","Konya","Kütahya","Malatya","Manisa","Mardin","Mersin","Muğla","Muş","Nevşehir","Niğde","Ordu","Osmaniye","Rize","Sakarya","Samsun","Şanlıurfa","Siirt","Sinop","Sivas","Şırnak","Tekirdağ","Tokat","Trabzon","Tunceli","Uşak","Van","Yalova","Yozgat","Zonguldak"];
+    var ilI = $("#k-il"), ilL = $("#k-il-liste"), ilceS = $("#k-ilce"), araI = $("#k-ara"), say = $("#k-say"), det = $("#k-detay");
+    var il = "İstanbul", sec = -1;
+    var ilceler = function(){
+      var l = K.filter(function(k){ return k.il === il; }).map(function(k){ return k.ilce; });
+      l = l.filter(function(v, i){ return l.indexOf(v) === i; }).sort(function(a, b){ return a.localeCompare(b, "tr"); });
+      ilceS.innerHTML = "<option value=\"\">Tüm ilçeler</option>" + l.map(function(v){ return "<option>" + esc(v) + "</option>"; }).join("");
+      ilceS.disabled = !l.length;
+    };
+    var ilSec = function(v){ il = v; ilI.value = v; ilL.hidden = true; ilI.setAttribute("aria-expanded", "false"); ilceler(); listele(); };
+    var oner = function(){
+      var q = kat(ilI.value.trim());
+      var m = IL.filter(function(v){ return !q || kat(v).indexOf(q) === 0; }).slice(0, 8);
+      sec = -1;
+      ilL.innerHTML = m.map(function(v, i){ return "<li role=\"option\" id=\"il-o" + i + "\" data-v=\"" + esc(v) + "\">" + esc(v) + "</li>"; }).join("") || "<li class=\"yok\">Eşleşen il yok</li>";
+      ilL.hidden = false; ilI.setAttribute("aria-expanded", "true");
+    };
+    ilI.addEventListener("input", oner);
+    ilI.addEventListener("focus", function(){ ilI.select(); oner(); });
+    ilI.addEventListener("keydown", function(ev){
+      var o = ilL.querySelectorAll("[data-v]");
+      if (ev.key === "ArrowDown" || ev.key === "ArrowUp") { ev.preventDefault(); sec = Math.max(0, Math.min(o.length - 1, sec + (ev.key === "ArrowDown" ? 1 : -1))); Array.prototype.forEach.call(o, function(e, i){ e.setAttribute("aria-selected", i === sec); }); if (o[sec]) ilI.setAttribute("aria-activedescendant", o[sec].id); }
+      if (ev.key === "Enter") { ev.preventDefault(); var h = o[sec] || o[0]; if (h) ilSec(h.getAttribute("data-v")); }
+      if (ev.key === "Escape") { ilL.hidden = true; }
+    });
+    ilL.addEventListener("mousedown", function(ev){ var t = ev.target.closest("[data-v]"); if (t) { ev.preventDefault(); ilSec(t.getAttribute("data-v")); } });
+    ilI.addEventListener("blur", function(){ setTimeout(function(){ ilL.hidden = true; if (IL.indexOf(ilI.value) < 0) ilI.value = il; }, 150); });
+
+    var listele = function(){
+      det.hidden = true; kl.hidden = false;
+      var ilce = ilceS.value, q = kat(araI.value.trim());
+      var r = K.filter(function(k){ return k.il === il && (!ilce || k.ilce === ilce) && (!q || kat(k.ad).indexOf(q) >= 0); });
+      if (!K.some(function(k){ return k.il === il; })) {
+        say.textContent = "";
+        kl.innerHTML = "<li class=\"bos\"><strong>" + esc(il) + " için kurum listesi henüz yüklenmedi.</strong><br>Yükümlülükler kurum türüne göre aynıdır: <a href=\"" + kok + "yukumlulukler/\">özel eğitim ve rehabilitasyon merkezlerinin yükümlülüklerini görün</a>.</li>";
+        return;
+      }
+      say.textContent = r.length + " kurum" + (ilce ? " · " + ilce : "") + " · " + il;
+      kl.innerHTML = r.slice(0, 60).map(function(k){ return "<li><a href=\"?k=" + k.s + "\" data-s=\"" + k.s + "\"><span class=\"ad\">" + esc(k.ad) + "</span><span class=\"yer\">" + esc(k.ilce) + " · " + esc(k.il) + "</span></a></li>"; }).join("") +
+        (r.length > 60 ? "<li class=\"bos\">İlk 60 kurum gösteriliyor. İlçe seçin ya da kurum adını yazın.</li>" : "") +
+        (!r.length ? "<li class=\"bos\">Bu aramayla eşleşen kurum yok.</li>" : "");
+    };
+    var goster = function(s){
+      var k = K.filter(function(x){ return x.s === s; })[0]; if (!k) { listele(); return; }
+      depo.koy("ipece-son-kurum", k.ad);
+      var gr = {}; V.satir.forEach(function(x){ (gr[x.k] = gr[x.k] || []).push(x); });
+      var kanunlar = Object.keys(gr).sort(function(a, b){ return gr[b].length - gr[a].length; });
+      kl.hidden = true; say.textContent = "";
+      det.hidden = false;
+      det.innerHTML = "<p><a href=\"?\" class=\"geri\">Listeye dön</a></p>" +
+        "<div class=\"kurum-kart\"><p class=\"ust-baslik\">Kurum</p><h2>" + esc(k.ad) + "</h2><dl><div><dt>İl</dt><dd>" + esc(k.il) + "</dd></div><div><dt>İlçe</dt><dd>" + esc(k.ilce) + "</dd></div><div><dt>Tür</dt><dd>Özel eğitim ve rehabilitasyon merkezi</dd></div></dl></div>" +
+        "<div class=\"bolum-bas\" style=\"margin-top:2rem\"><div><h2>Bu kurumun tabi olduğu yükümlülükler</h2><p>" + V.satir.length + " yükümlülük, " + kanunlar.length + " kanun. Kanun seçerek daraltın.</p></div></div>" +
+        "<label class=\"kanun-sec\" for=\"k-kanun\">Kanun<select id=\"k-kanun\"><option value=\"\">Tüm kanunlar</option>" + kanunlar.map(function(n){ return "<option value=\"" + n + "\">" + n + " · " + esc(V.kanun[n]) + " (" + gr[n].length + ")</option>"; }).join("") + "</select></label>" +
+        "<div id=\"k-yuk\"></div><div id=\"k-ga\" style=\"margin-top:2rem\"></div>";
+      var yukCiz = function(){
+        var sec2 = $("#k-kanun", det).value;
+        $("#k-yuk", det).innerHTML = kanunlar.filter(function(n){ return !sec2 || n === sec2; }).map(function(n){
+          return "<h3 class=\"kanun-b\"><span class=\"kod\">" + n + "</span> " + esc(V.kanun[n]) + "</h3><ul class=\"yuk-liste\">" + gr[n].map(function(x){
+            return "<li><a href=\"" + kok + "yukumlulukler/" + x.slug + "/\"><span class=\"kod\">" + esc(x.kod) + "</span><span class=\"ad\">" + esc(x.yuk) + "</span><span class=\"" + (x.dogru ? "tutar" : "dogrulanmadi") + "\">" + esc(x.tutar) + "</span></a></li>";
+          }).join("") + "</ul>";
+        }).join("");
+      };
+      $("#k-kanun", det).addEventListener("change", yukCiz); yukCiz();
+      geriArama($("#k-ga", det), null);
+      window.scrollTo(0, det.getBoundingClientRect().top + window.scrollY - 90);
+    };
+    kl.addEventListener("click", function(ev){ var a = ev.target.closest("a[data-s]"); if (a) { ev.preventDefault(); history.pushState(null, "", "?k=" + a.getAttribute("data-s")); goster(a.getAttribute("data-s")); } });
+    det.addEventListener("click", function(ev){ var a = ev.target.closest("a.geri"); if (a) { ev.preventDefault(); history.pushState(null, "", location.pathname); listele(); } });
+    window.addEventListener("popstate", function(){ var s = new URLSearchParams(location.search).get("k"); if (s) goster(s); else listele(); });
+    ilceS.addEventListener("change", listele); araI.addEventListener("input", listele);
+    ilceler();
+    var ilkK = new URLSearchParams(location.search).get("k");
+    if (ilkK) goster(ilkK); else listele();
+  }
 
   /* iletişim: konu ön seçimi; form henüz bir adrese bağlı değil, bunu açıkça söyler */
   var fk = $("#f-konu");

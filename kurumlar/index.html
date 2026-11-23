@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="tr" data-kok="../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Kurumunuzu bulun | ipece</title>
+<meta name="description" content="Kurum türü, il ve ilçeye göre kurumunuzu bulun; tabi olduğu yükümlülükleri ve 2026 idari para cezası tutarlarını görün.">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="../assets/ikon.svg" type="image/svg+xml">
+<link rel="preload" href="../assets/font/serif-600.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/font/sans-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/site.css">
+<meta property="og:title" content="Kurumunuzu bulun | ipece">
+<meta property="og:description" content="Kurum türü, il ve ilçeye göre kurumunuzu bulun; tabi olduğu yükümlülükleri ve 2026 idari para cezası tutarlarını görün.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="tr_TR">
+<meta name="theme-color" content="#0F2C5C">
+
+</head>
+<body>
+<a class="atla" href="#icerik">İçeriğe geç</a>
+<header class="bas">
+  <div class="kap">
+    <a class="logo" href="../" aria-label="ipece ana sayfa"><img src="../assets/logo.svg" alt="ipece" width="200" height="62"></a>
+    <form class="ara" role="search" action="../yukumlulukler/">
+      <input type="search" name="q" placeholder="Madde ya da konu: 4857/98, ücret" aria-label="Yükümlülüklerde ara">
+      <button type="submit">Ara</button>
+    </form>
+    <button class="menu-dugme" type="button" aria-expanded="false" aria-controls="ana-menu">Menü</button>
+  </div>
+</header>
+<nav class="menu" id="ana-menu" aria-label="Ana menü">
+  <div class="kap">
+    <form class="mobil-ara" role="search" action="../yukumlulukler/"><input type="search" name="q" placeholder="Madde ya da konu ara" aria-label="Yükümlülüklerde ara"><button type="submit">Ara</button></form>
+    <ul><li><a href="../kurumlar/" aria-current="page">Kurumlar</a></li><li><a href="../yukumlulukler/">Yükümlülükler</a></li><li><a href="../ceza-geldiyse/">Ceza geldiyse</a></li><li><a href="../yayinlar/">Yayınlar</a></li><li><a href="../iletisim/">İletişim</a></li></ul>
+  </div>
+</nav>
+<nav class="yol kap" aria-label="Yol izi"><ol><li><a href="../">Ana sayfa</a></li><li aria-current="page">Kurumlar</li></ol></nav>
+<main id="icerik">
+
+<div class="kap" style="padding-block:1.6rem 4rem">
+  <h1>Kurumunuzu bulun</h1>
+  <p class="giris" style="color:var(--ikincil);max-width:62ch;margin-top:.8rem;font-size:1.1rem">Kurum türünü, ili ve ilçeyi seçin; kurumunuzu bulun ve tabi olduğu yükümlülükleri görün.</p>
+  <div class="secici" id="secici">
+    <div class="adim-kutu">
+      <label for="k-tur"><span class="adim-no">1</span> Kurum türü</label>
+      <select id="k-tur"><option value="oerm">Özel eğitim ve rehabilitasyon merkezi</option></select>
+      <p class="kucuk">Diğer kurum türleri sırayla eklenecek.</p>
+    </div>
+    <div class="adim-kutu">
+      <label for="k-il"><span class="adim-no">2</span> İl</label>
+      <div class="oneri-kap"><input id="k-il" autocomplete="off" placeholder="İl adını yazın" role="combobox" aria-expanded="false" aria-controls="k-il-liste" aria-autocomplete="list" value="İstanbul">
+      <ul id="k-il-liste" role="listbox" class="oneri" hidden></ul></div>
+    </div>
+    <div class="adim-kutu">
+      <label for="k-ilce"><span class="adim-no">3</span> İlçe</label>
+      <select id="k-ilce"><option value="">Tüm ilçeler</option></select>
+    </div>
+    <div class="adim-kutu">
+      <label for="k-ara"><span class="adim-no">4</span> Kurum</label>
+      <input id="k-ara" type="search" autocomplete="off" placeholder="Kurum adı">
+    </div>
+  </div>
+  <p class="sonuc-say" id="k-say" aria-live="polite"></p>
+  <ul class="kurum-liste" id="k-liste"></ul>
+  <section id="k-detay" hidden></section>
+</div>
+</main>
+<footer class="alt">
+  <div class="kap">
+    <div>
+      <a class="logo" href="../" aria-label="ipece ana sayfa"><img src="../assets/logo-koyu.svg" alt="ipece" width="200" height="62"></a>
+      <p style="margin-top:1rem;max-width:40ch">İdari para cezası gelmeden önce kurumunuzun yükümlülüklerini görün.</p>
+    </div>
+    <div>
+      <h2>Bilgi</h2>
+      <ul><li><a href="../yukumlulukler/">Yükümlülükler</a></li><li><a href="../ceza-geldiyse/">Ceza geldiyse</a></li><li><a href="../yayinlar/">Yayınlar</a></li></ul>
+    </div>
+    <div>
+      <h2>Kurum</h2>
+      <ul><li><a href="../hakkimizda/">Hakkımızda</a></li><li><a href="../iletisim/">İletişim</a></li><li><a href="../iletisim/?konu=hata&amp;sayfa=/kurumlar/">Bu sayfada hata mı var?</a></li></ul>
+    </div>
+  </div>
+  <div class="cati"><div class="kap">Çatı kurumlarımız <span>IPMAC</span><span>Balrium</span><span>SS4Key</span></div></div>
+  <div class="son"><div class="kap"><span>© 2026 ipece</span><span>Tutarlar: Balrium 2026 yaptırım envanteri · Son güncelleme 23.11.2026</span></div></div>
+</footer>
+<script src="../assets/veri.js" defer></script><script src="../assets/kurumlar.js" defer></script><script src="../assets/site.js" defer></script>
+</body>
+</html>
