@@ -64,11 +64,11 @@
     var ust = tahmin != null ? tahmin : (x ? x.ust : null);
     var esikUstu = ust != null && ust >= PARAM.esik;
     var baslik = esikUstu ? "Bu tutar yüksek: hukukçumuz sizi arasın" : "Bu madde için hukukçumuz sizi arasın";
-    var aciklama = esikUstu ? "Tahmini tutar " + sayiYaz(ust) + " TL. Telefonunuzu bırakın, uzmanımız dosyanızı sizinle değerlendirsin." : "Telefonunuzu bırakın, uzmanımız sizi arasın.";
+    var aciklama = esikUstu ? "Tahmini tutar " + sayiYaz(ust) + " TL. Numaranızı bırakın, hukukçumuz sizi arasın." : "Numaranızı bırakın, uzmanımız sizi arasın.";
     kap.innerHTML = "<section class=\"geri-arama" + (esikUstu ? " esik" : "") + "\" aria-labelledby=\"ga-b\"><h2 id=\"ga-b\">" + baslik + "</h2><p>" + aciklama + "</p>" +
       "<form class=\"ga-form\"><label>Ad soyad<input name=\"ad\" autocomplete=\"name\" required></label><label>Telefon<input name=\"tel\" type=\"tel\" inputmode=\"tel\" autocomplete=\"tel\" required pattern=\"[0-9 +()\\-]{10,}\"></label>" +
       "<label class=\"tam\">Kurum<input name=\"kurum\" autocomplete=\"organization\" value=\"" + esc(depo.al("ipece-son-kurum", "")) + "\"></label>" +
-      "<label class=\"onay tam\"><input type=\"checkbox\" name=\"onay\" required> Telefon numaramın yalnız bu talep için aranmak amacıyla kullanılmasını kabul ediyorum.</label>" +
+      "<label class=\"onay tam\"><input type=\"checkbox\" name=\"onay\" required> Numaramın yalnız bu talep için kullanılmasını kabul ediyorum.</label>" +
       "<button class=\"dugme\" type=\"submit\">Beni arayın</button></form><div class=\"ga-sonuc\" role=\"status\" hidden></div></section>";
     var f = $(".ga-form", kap);
     f.addEventListener("submit", function(ev){
