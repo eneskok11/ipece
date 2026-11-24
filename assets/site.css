@@ -13,15 +13,15 @@
   --sahne:#EEF3FA;
   --yuzey:#F7F9FC;
   --metin:#0E1A33;
-  --lacivert:#0F2C5C;
-  --lacivert-2:#0A1F44;
-  --mavi:#1D4E9E;
+  --lacivert:#2F318D;
+  --lacivert-2:#1F2166;
+  --mavi:#2F318D;
   --ikincil:#4A5873;
   --soluk:#6B7891;
   --cizgi:#E3E8F0;
   --cizgi-2:#D3DCE8;
-  --kirmizi:#C8102E;
-  --kirmizi-z:#FCEEF0;
+  --kirmizi:#D73831;
+  --kirmizi-z:#FBECEB;
   --r-s:3px; --r:4px; --r-l:6px;
   --golge:0 1px 2px rgba(14,26,51,.05);
   --golge-urun:0 24px 60px -28px rgba(15,44,92,.32);
@@ -652,23 +652,23 @@ h2{font-weight:400;letter-spacing:-.025em}
 @media print{ .e-zemin{background:#fff;padding:0} .e-soru{display:none} }
 
 /* ===================== kurumsal katman: AİHM / Anayasa Mahkemesi kalıbı ===================== */
-:root{--kurum:#0B2A57;--kurum-2:#123A72;--kurum-3:#071E40;--bant:#5C6B85;--gri-menu:#EEF0F4}
+:root{--kurum:#2F318D;--kurum-2:#272977;--kurum-3:#1F2166;--bant:#4B4E8C;--gri-menu:#EFEFF5}
 .kb{position:relative;z-index:20}
 .kb-ust{background:var(--kurum);color:#fff}
 .kb-ust .kap{display:flex;align-items:center;gap:1.5rem;min-height:94px}
 .kb-kimlik{display:flex;align-items:center;gap:.95rem;color:#fff;text-decoration:none}
 .kb-kimlik:hover{color:#fff}
-.kb-kimlik img{width:58px;height:58px}
-.kb-kimlik span{display:grid;gap:.15rem;line-height:1.15}
-.kb-kimlik small{font-size:.82rem;color:#C9D4E8}
+.kb-kimlik img{width:auto;height:56px}
+.kb-kimlik span{font-size:.9rem;line-height:1.3;color:#fff;padding-left:.95rem;border-left:1px solid rgba(255,255,255,.3)}
+.kb-kimlik small{font-size:.82rem;color:#CFD0EA}
 .kb-kimlik b{font:600 1.75rem/1.05 var(--yazi);letter-spacing:.16em}
 .kb-sag{margin-left:auto;display:flex;align-items:center;gap:1.5rem}
-.kb-cati{font-size:.88rem;color:#C9D4E8;white-space:nowrap}
+.kb-cati{font-size:.88rem;color:#CFD0EA;white-space:nowrap}
 .kb-cati i{font-style:normal;margin:0 .45rem;opacity:.45}
 .kb-ara{display:flex;border:1px solid rgba(255,255,255,.35);border-radius:3px;overflow:hidden}
 .kb-ara:focus-within{border-color:#fff}
 .kb-ara input{background:transparent;border:0;color:#fff;padding:.55rem .75rem;font:inherit;font-size:.9rem;width:200px;outline:none}
-.kb-ara input::placeholder{color:#AFC0DA}
+.kb-ara input::placeholder{color:#B9BBE0}
 .kb-ara button{background:none;border:0;color:#fff;padding:0 .75rem;cursor:pointer;display:grid;place-items:center}
 .kb .menu-dugme{background:transparent;color:#fff;border-color:rgba(255,255,255,.45);border-radius:3px}
 .kb-menu{background:var(--gri-menu);border-bottom:1px solid #D9DEE7}
@@ -685,15 +685,20 @@ h2{font-weight:400;letter-spacing:-.025em}
 .k-sahne{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);background:var(--kurum);min-height:360px}
 .k-sol{padding:clamp(2rem,4vw,3.2rem);color:#fff;display:grid;gap:1.1rem;align-content:center}
 .k-sol h1{color:#fff;font:400 clamp(2.1rem,3.8vw,3rem)/1.12 var(--baslik);letter-spacing:-.02em}
-.k-sol>p{color:#D3DDEE;font-size:1.05rem;line-height:1.6;max-width:46ch}
+.k-sol>p{color:#D9DAEF;font-size:1.05rem;line-height:1.6;max-width:46ch}
 .k-soru{display:grid;gap:.45rem;margin-top:.4rem;max-width:520px}
 .k-soru label{font-weight:600;font-size:.92rem;color:#fff}
 .k-soru div{display:flex;background:#fff;padding:4px;border-radius:3px}
 .k-soru input{flex:1;min-width:0;border:0;outline:none;font:inherit;font-size:1rem;padding:.55rem .75rem;color:var(--metin)}
 .k-soru .dugme{border-radius:2px;background:var(--kurum);border-color:var(--kurum);min-height:44px}
 .k-yanit{max-width:520px;color:var(--metin)}
-.k-sag{background:var(--kurum-2);display:grid;place-items:center;padding:clamp(1.5rem,3vw,2.5rem);color:rgba(255,255,255,.6)}
-.k-bina{width:100%;max-width:470px}
+.k-sag{background:var(--kurum-2);padding:clamp(1.6rem,3vw,2.6rem);color:#fff;display:grid;align-content:start;gap:.6rem}
+.k-sag h2{font:600 1.05rem/1.2 var(--yazi);color:#fff;padding-bottom:.7rem;border-bottom:2px solid var(--kirmizi);justify-self:start}
+.k-sik{list-style:none;margin:0;padding:0}
+.k-sik button{display:flex;justify-content:space-between;align-items:center;gap:1rem;width:100%;min-height:48px;padding:.75rem 0;background:none;border:0;border-bottom:1px solid rgba(255,255,255,.18);color:#fff;font:400 1rem/1.35 var(--yazi);text-align:left;cursor:pointer}
+.k-sik button::after{content:"›";font-size:1.4rem;line-height:1;opacity:.6}
+.k-sik button:hover{text-decoration:underline;text-underline-offset:.25em}
+.k-sik-not{font-size:.82rem;color:#C9CBE6;margin-top:.4rem}
 
 /* hızlı erişim bandı */
 .k-hizli{background:var(--bant)}
@@ -720,15 +725,14 @@ h2{font-weight:400;letter-spacing:-.025em}
 .k-dugmeler a:hover{background:var(--kurum-3);color:#fff}
 
 /* alt bilgi */
-.ka{background:var(--kurum);color:#C9D4E8;font-size:.92rem;margin-top:3rem}
+.ka{background:var(--kurum);color:#CFD0EA;font-size:.92rem;margin-top:3rem}
 .ka a{color:#fff;text-decoration:none}
 .ka a:hover{text-decoration:underline}
 .ka-ic{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,.8fr) minmax(0,1.4fr) minmax(0,1.2fr);gap:2rem;padding-block:2.8rem}
 .ka h2{font:600 .95rem/1.2 var(--yazi);color:#fff;margin-bottom:.9rem;letter-spacing:0}
 .ka ul{list-style:none;margin:0;padding:0;display:grid;gap:.55rem}
 .ka-amblem{display:flex;align-items:center;gap:1rem;justify-self:end;color:#fff}
-.ka-amblem span{display:grid;font:600 1.4rem/1.1 var(--yazi);letter-spacing:.16em}
-.ka-amblem small{font:400 .75rem/1.3 var(--yazi);letter-spacing:0;color:#C9D4E8;max-width:18ch;margin-top:.3rem}
+.ka-amblem img{width:auto;height:104px}
 .ka-son{background:var(--kurum-3)}
 .ka-son .kap{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding-block:1rem;font-size:.82rem}
 
@@ -742,9 +746,8 @@ h2{font-weight:400;letter-spacing:-.025em}
 }
 @media (max-width:860px){
   .kb-ust .kap{min-height:76px}
-  .kb-kimlik img{width:46px;height:46px}
-  .kb-kimlik b{font-size:1.35rem}
-  .kb-kimlik small{font-size:.72rem;max-width:22ch}
+  .kb-kimlik img{height:44px}
+  .kb-kimlik span{font-size:.74rem;padding-left:.7rem}
   .kb-sag{display:none}
   .kb .menu-dugme{display:inline-flex;align-items:center;margin-left:auto}
   .kb-menu{position:static;display:none;box-shadow:none;padding:0}
@@ -756,7 +759,6 @@ h2{font-weight:400;letter-spacing:-.025em}
   .kb-menu .mobil-ara{display:flex;border:1px solid var(--cizgi-2);border-radius:3px;overflow:hidden;background:#fff}
   .kb-menu .menu-cta{display:inline-flex;justify-self:start;border-radius:3px;color:#fff;background:var(--kurum)}
   .k-sahne{grid-template-columns:minmax(0,1fr)}
-  .k-sag{display:none}
 }
 @media (max-width:640px){
   .k-sahne-kap{padding-top:0;padding-left:0;padding-right:0}

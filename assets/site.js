@@ -160,6 +160,14 @@
 
   /* soru asistanı: yalnız yükümlülük kayıtlarından yanıt verir, her yanıt kaynağa bağlanır */
   var af = $("#asistan-form");
+  document.addEventListener("click", function(ev){
+    var t = ev.target.closest && ev.target.closest("[data-soru]");
+    if (!t || !af) return;
+    var g = $("#asistan-soru"); g.value = t.getAttribute("data-soru");
+    if (af.requestSubmit) af.requestSubmit(); else af.dispatchEvent(new Event("submit", {cancelable: true}));
+    g.focus({preventScroll: true});
+    if (window.innerWidth < 861) af.scrollIntoView({behavior: "smooth", block: "start"});
+  });
   if (af && V) af.addEventListener("submit", function(e){
     e.preventDefault();
     var c = $("#asistan-yanit"), q = kat($("#asistan-soru").value);
